@@ -36,7 +36,7 @@
                                     <ul class="dropdown-menu fade-up">
                                         <?php foreach ($categories as $category) : ?>
                                             <li>
-                                                <a class="dropdown-item" href="category.php?catID=<?= $category['category_id'] ?>"> <?= $category["category_name"] ?>
+                                                <a class="dropdown-item" href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>"> <?= $category["category_name"] ?>
                                                 </a>
                                             </li>
                                             <hr style="height:-50px;margin-left: auto;  margin-right: auto; border: 0 none;width: 100%;">

@@ -1,4 +1,10 @@
 <?php
+    if(!isset($_GET["authid"]))
+    {
+        header("location: 404.php?err=Error Getting Author");
+        exit;
+    }
+
     include 'includes/header.php';
     include 'includes/navbar.php';
 
@@ -76,26 +82,26 @@
                         <!--post1-->
                         <div class="post-list post-list-style4 pt-0"> 
                             <div class="post-list-image">
-                                <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                     <img src="img/article/<?= $article['article_image'] ?>" alt="">
                                 </a>
                             </div>
                             <div class="post-list-content">
                                 <ul class="entry-meta"> 
                                     <li class="entry-cat">
-                                        <a href="category.php?catID=<?= $article['category_id'] ?>" class="category-style-1">
+                                        <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
                                             <?= $article['category_name'] ?>
                                         </a>
                                     </li>
                                     <li class="post-date"> <span class="line"></span><?= date_format(date_create($article['article_created_time']), "F d, Y ") ?></li>
                                 </ul>
                                 <h5 class="entry-title">
-                                    <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                         <?= strlen($article['article_title']) > 30 ? substr($article['article_title'],0,30)."..." : $article['article_title']; ?>
                                     </a>
                                 </h5>  
                                 <div class="post-btn">
-                                    <a href="post-single.php?id=<?= $article['article_id'] ?>" class="btn-read-more">Continue Reading <i class="las la-long-arrow-alt-right"></i></a>
+                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>" class="btn-read-more">Continue Reading <i class="las la-long-arrow-alt-right"></i></a>
                                 </div>
                             </div>
                         </div>

@@ -54,7 +54,7 @@
                                         <!--post1-->
                                         <li class="small-post">
                                             <div class="small-post-image">
-                                                <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                                     <img src="img/article/<?= $article['article_image'] ?>" alt="">
                                                     <small class="nb">
                                                         <!-- number of person that has viewed post -->
@@ -64,7 +64,7 @@
                                             </div>
                                             <div class="small-post-content">
                                                 <p>
-                                                    <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                                         <?= strlen($article['article_title']) > 47 ? substr($article['article_title'],0,47)."..." : $article['article_title']; ?>
                                                     </a>
                                                 </p>
@@ -86,7 +86,7 @@
                                     <ul class="list-inline">
                                         <?php foreach ($categories as $category) : ?>
                                             <li>
-                                                <a href="category.php?catID=<?= $category['category_id'] ?>"> <?= $category["category_name"] ?>
+                                                <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>"> <?= $category["category_name"] ?>
                                                     <span style="color: <?= $category["category_color"]; ?>;"> <?= $category["article_count"] ?></span>
                                                 </a>
                                             </li>

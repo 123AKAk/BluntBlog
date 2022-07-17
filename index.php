@@ -43,19 +43,19 @@
                     <div class="col-lg-6">
                         <div class="post-list-content">
                             <h2 class="entry-title">
-                                    <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                         <?= strlen($article['article_title']) > 57 ? substr($article['article_title'],0,57)."..." : $article['article_title']; ?>
                                     </a>
                             </h2>  
                             <ul class="entry-meta">
-                                <li class="post-author-img"><img src="assets/img/author/1.jpg" alt=""></li>
+                                <li class="post-author-img"><img src="img/avatar/<?= $article['author_avatar'] ?>" alt="<?= $article['author_fullname'] ?>"></li>
                                 <li class="post-author">
                                     <a href="author.php?authid=<?= $article['author_id'] ?>">
                                         <?= $article['author_fullname'] ?>
                                     </a>
                                 </li>
                                 <li class="entry-cat">
-                                    <a href="category.php?catID=<?= $article['category_id'] ?>" class="category-style-1">
+                                    <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
                                         <span class="line"></span> 
                                         <?= $article['category_name'] ?>
                                     </a>
@@ -68,7 +68,7 @@
                                 </p>
                             </div>
                             <div class="post-btn">
-                                <a href="post-single.php?id=<?= $article['article_id'] ?>" class="btn-read ">read more<i class="las la-long-arrow-alt-right"></i></a>
+                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>" class="btn-read ">read more<i class="las la-long-arrow-alt-right"></i></a>
                             </div>
                         </div>
                    </div>
@@ -96,14 +96,14 @@
                     <!--Latest Articles-->
                     <div class="post-list post-list-style1 ">
                         <div class="post-list-image">
-                            <a href="post-single.php?id=<?= $article['article_id'] ?>">
-                                <img src="img/article/<?= $article['article_image'] ?>" alt="">
+                            <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
+                                <img src="img/article/<?= $article['article_image'] ?>" alt="<?=$article['article_title']?>">
                             </a>
                         </div>
                         <div class="post-list-title">
                             <div class="entry-title">
                                 <h5>
-                                    <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                         <?= strlen($article['article_title']) > 57 ? substr($article['article_title'],0,57)."..." : $article['article_title']; ?>
                                     </a>
                                 </h5>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="post-list-category">
                             <div class="entry-cat">
-                                <a href="category.php?catID=<?= $article['category_id'] ?>" class="category-style-1">
+                                <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
                                     <?= $article['category_name'] ?>
                                 </a>
                             </div>
@@ -131,18 +131,18 @@
                     <div class="col-lg-6">
                         <div class="post-overly post-overly-2">
                             <div class="post-ovetly-image">
-                                <a href="post-single.php?id=<?= $article['article_id'] ?>">
-                                    <img src="img/article/<?= $article['article_image'] ?>" alt="" style="">
+                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
+                                    <img src="img/article/<?= $article['article_image'] ?>" alt="<?=$article['article_title']?>" style="">
                                 </a>
                             </div>
                             <div class="post-overly-content">
                                 <div class="entry-cat">
-                                    <a href="category.php?catID=<?= $article['category_id'] ?>" class="category-style-2">
+                                    <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-2">
                                         <?= $article['category_name'] ?>
                                     </a>
                                 </div>
                                 <h3 class="entry-title">
-                                    <a href="post-single.php?id=<?= $article['article_id'] ?>"><?= $article ['article_title'] ?></a>
+                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>"><?= $article ['article_title'] ?></a>
                                 </h3>
                                 <ul class="entry-meta">
                                     <li class="post-author">
@@ -170,7 +170,7 @@
             <div class="row">
                 <div class="col-lg-12">
                 <div class="image">
-                    <img src="assets/img/ads/ads.jpg" alt="">
+                    <img src="assets/img/ads/ads.jpg" alt="ads">
                 </div>
                 </div>
             </div>
@@ -201,7 +201,7 @@
                                 <div class="post-list-content">
                                     <ul class="entry-meta">
                                         <li class="entry-cat">
-                                            <a href="category.php?catID=<?= $article['category_id'] ?>" class="category-style-1">
+                                            <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
                                                 <?= $article['category_name'] ?>
                                             </a>
                                         </li>
@@ -213,7 +213,7 @@
                                         <li class="post-date"> <span class="line"></span><?= date_format(date_create($article['article_created_time']), "F d, Y ") ?></li>
                                     </ul>
                                     <h4 class="entry-title">
-                                        <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                        <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                             <?= strlen($article['article_title']) > 57 ? substr($article['article_title'],0,57)."..." : $article['article_title']; ?>
                                         </a>
                                     </h4>
@@ -253,16 +253,16 @@
                 <!--post-1-->
                 <div class="post-overly post-overly-2">
                     <div class="post-overly-image">
-                        <img src="img/article/<?= $article['article_image'] ?>" alt="">
+                        <img src="img/article/<?= $article['article_image'] ?>" alt="<?=$article['article_title']?>">
                     </div>
                     <div class="post-overly-content">
                         <div class="entry-cat">
-                            <a href="category.php?catID=<?= $article['category_id'] ?>" class="category-style-2">
+                            <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-2">
                                 <?= $article['category_name'] ?>
                             </a>
                         </div>
                         <h4 class="entry-title">
-                            <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                            <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                 <?= strlen($article['article_title']) > 30 ? substr($article['article_title'],0,47)."..." : $article['article_title']; ?>
                             </a>
                         </h4>

@@ -1,8 +1,14 @@
 <?php
+    if(!isset($_GET['id']))
+    {
+        header("location: 404.php?err=Error Getting Post");
+        exit;
+    }
+    
     include 'includes/header.php';
     include 'includes/navbar.php';
 
-    $article_id = $_GET['id'];
+    $article_id = $components->unprotect($_GET['id']);
 
     // Get Article Info
     $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN `author` ON `article`.id_author = `author`.author_id  WHERE `article_id` = ?");
@@ -85,7 +91,7 @@
                                     </li>
                                     <li class="entry-cat">
                                         <span class="line"></span>
-                                        <a class="post-category" href="articleOfCategory.php?catID=<?= $category['category_id'] ?>">
+                                        <a class="post-category" href="category.php?data=<?=substr($category['category_name'],0,30)."..."?>&catID=<?= $components->protect($category['category_id']) ?>">
                                         <?= $category['category_name'] ?>
                                     </a>
                                     </li>
@@ -193,13 +199,13 @@
                                             </div>
                                             <div class="small-post-content">
                                             <small>
-                                                <a href="post-single.php?id=<?= $aart['article_id'] ?>">
+                                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                                     <i class="las la-arrow-left"></i>
                                                     Previous related post category
                                                 </a>
                                             </small>
                                             <p>
-                                                <a href="post-single.php?id=<?= $aart['article_id'] ?>">
+                                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                                     <?= strlen($aart['article_title']) > 47 ? substr($aart['article_title'],0,47)."..." : $aart['article_title']; ?>
                                                 </a>
                                             </p>
@@ -228,13 +234,13 @@
                                             </div>
                                             <div class="small-post-content">
                                                 <small>
-                                                    <a href="post-single.php?id=<?= $bart['article_id'] ?>">
+                                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                                         Next related post category
                                                         <i class="las la-arrow-right"></i>
                                                     </a>
                                                 </small>
                                                 <p>
-                                                    <a href="post-single.php?id=<?= $bart['article_id'] ?>">
+                                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                                         <?= strlen($bart['article_title']) > 47 ? substr($bart['article_title'],0,47)."..." : $bart['article_title']; ?>
                                                     </a>
                                                 </p>
@@ -295,7 +301,7 @@
                                 <div class="comments-form">
                                     <h4 >Leave a Comment</h4>
                                     <!--form-->
-                                    <form class="form " action="assets/insert.php?type=comment&id=<?= $article_id ?>#comment" method="POST" id="main_contact_form">
+                                    <form class="form " action="assets/insert.php?type=comment&id=<?= $components->protect($article_id) ?>#comment" method="POST" id="main_contact_form">
                                         <p>Your email adress will not be published ,Requied fileds are marked*.</p>
                                         <div class="alert alert-success contact_msg" style="display: none" role="alert">
                                             Your message was sent successfully.
@@ -305,7 +311,7 @@
                                                 <div class="form-group">
                                                     <input type="text" name="name" id="name" class="form-control" placeholder="Name*" required="required">
                                                     <input type="hidden" name="username" value="<?= rand() ?>">
-                                                    <input type="hidden" name="id_article" value="<?= $article_id ?>">
+                                                    <input type="hidden" name="id_article" value="<?= $components->protect($article_id) ?>">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">

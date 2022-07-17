@@ -1,7 +1,24 @@
 <?php
-    session_start();
+    if(!isset($_POST["searchkeyword"]))
+    {
+        header("location: ./");
+    }
+
+    $keywrd = $_POST["searchkeyword"];
+
     include 'includes/header.php';
     include 'includes/navbar.php';
+    
+    //$stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE name LIKE :keyword OR price LIKE :keyword OR description LIKE :keyword OR slug LIKE :keyword WHERE category_id = ?");
+
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE article_title LIKE :keyword OR category_name LIKE :keyword OR author_fullname LIKE :keyword");
+    $stmt->bindValue(':keyword', '%' . $keywrd . '%', PDO::PARAM_STR);
+    $stmt->execute();
+    $searchdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    session_start();
+
+    
 ?> 
 
 
@@ -12,7 +29,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-heading-2-title text-left">
-                            <h2>Search resultats for : branding</h2>
+                            <h2>Search resultats for : <?= $keywrd ?></h2>
                             <p class="desc">8 Articles were found for keyword  <strong> branding</strong></p>
                         </div>
                     </div>  
@@ -28,47 +45,35 @@
             <div class="row">
                 <div class="col-lg-8 oredoo-content">
                     <div class="theiaStickySidebar">
-                     <!--Post1-->
-                    <div class="post-list post-list-style1 pt-0">
-                        <div class="post-list-image">
-                            <a href="post-single.php">
-                                <img src="assets/img/blog/1.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="post-list-title">
-                            <div class="entry-title">
-                                <h5>
-                                    <a href="post-single.php">Brand is just a perception, and perception will match reality over time </a>
-                                </h5>
-                            </div>
-                        </div>
-                        <div class="post-list-category">
-                            <div class="entry-cat">
-                                <a href="blog-layout-1.php" class="category-style-1">Branding</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!--pagination-->
-                    <div class="pagination">     
-                        <div class="pagination-area">
-                            <div class="row"> 
-                                <div class="col-lg-12">
-                                    <div class="pagination-list">
-                                        <ul class="list-inline">
-                                            <li><a href="#" ><i class="las la-arrow-left"></i></a></li>
-                                            <li><a href="#" class="active">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#" ><i class="las la-arrow-right"></i></a></li>
-                                        </ul>
+                        <!--Post1-->
+                        <?php foreach ($searchdata as $data) : ?>
+                            <div class="post-list post-list-style1 pt-0">
+                                <div class="post-list-image">
+                                    <a href="post-single.php?data=<?=substr($data['article_title'],0,30)."..."?>&id=<?= $components->protect($data['article_id']) ?>">
+                                        <img src="img/article/<?= $data['article_image'] ?>" alt="">
+                                    </a>
+                                </div>
+                                <div class="post-list-title">
+                                    <div class="entry-title">
+                                        <h5>
+                                            <a href="post-single.php?data=<?=substr($data['article_title'],0,30)."..."?>&id=<?= $components->protect($data['article_id']) ?>">
+                                                <?php //echo strlen($article['article_title']) > 57 ? substr($article['article_title'],0,57)."..." : $article['article_title']; ?>
+                                                <?= $data['article_title'] ?>
+                                            </a>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="post-list-category">
+                                    <div class="entry-cat">
+                                        <a href="category.php?data=<?=substr($data['category_name'],0,30)."..."?>&catID=<?= $components->protect($data['category_id']) ?>" class="category-style-1">
+                                            <?= $data['category_name'] ?>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <!--/-->
+                        <?php endforeach;  ?>
+
                     </div>
                 </div>
 

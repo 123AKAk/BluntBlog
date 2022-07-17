@@ -40,12 +40,12 @@
                         </div>
                         <div class="post-overly-content">
                             <div class="entry-cat">
-                                <a href="category.php?catID=<?= $article['category_id'] ?>" class="category-style-2">
+                                <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-2">
                                     <?= $article['category_name'] ?>
                                 </a>
                             </div>
                             <h5 class="entry-title">
-                                <a href="post-single.php?id=<?= $article['article_id'] ?>">
+                                <a href="post-single.phpdata=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                     <?= strlen($article['article_title']) > 50 ? substr($article['article_title'],0,50)."..." : $article['article_title']; ?>
                                 </a>
                             </h5>

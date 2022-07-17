@@ -24,7 +24,7 @@
                                     <p>Sign up for free and be the first to get notified about new posts.</p>
                                 
                                 </div>
-                                <form action="#" class="newslettre-form">
+                                <form action="subnewsletter.php" class="newslettre-form" method="POST" enctype="multipart/form-data">
                                     <div class="form-flex">
                                         <div class="form-group">
                                             <input type="email" class="form-control" placeholder="Your Email Adress" required="required">
@@ -84,9 +84,9 @@
                         <button type="button" class="close">
                             <i class="far fa-times"></i>
                         </button>
-                        <form class="search-form" action="https://assiagroupe.site/html/Oredoo/search.php">
-                            <input type="search" value="" placeholder="What are you looking for?">
-                            <button type="submit" class="search-btn"> search</button>
+                        <form class="search-form" action="search.php" method="POST" enctype="multipart/form-data">
+                            <input type="search" name="searchkeyword" value="" placeholder="What are you looking for?">
+                            <button type="submit" class="search-btn"> Search</button>
                         </form>
                     </div>
                 </div>
