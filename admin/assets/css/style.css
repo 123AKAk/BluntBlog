@@ -626,6 +626,7 @@ body .table-dark th {
     border-collapse: separate;
     border-spacing: 0 10px;
     margin: -10px 0;
+    border: none;
 }
 .table-styled .progress {
     height: 8px;

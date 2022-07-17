@@ -4,7 +4,7 @@
     include 'includes/sidebar.php';
 
     // Get all Articles Data
-    $stmt = $conn->prepare("SELECT * FROM article, author, category WHERE id_categorie = category_id AND author_id = id_author ORDER BY article_id DESC");
+    $stmt = $conn->prepare("SELECT * FROM users ORDER BY id DESC");
     $stmt->execute();
     $data = $stmt->fetchAll();
 
@@ -17,14 +17,14 @@
                     <div class="colxl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-title-wrapper">
                             <div class="page-title-box">
-                                <h2 class="page-title bold">All Post</h2>
+                                <h2 class="page-title bold">Users</h2>
                             </div>
                             <div class="breadcrumb-list">
                                 <ul>
                                     <li class="breadcrumb-link">
                                         <a href="index.php"><i class="fas fa-home mr-2"></i>Home</a>
                                     </li>
-                                    <li class="breadcrumb-link active">All Post</li>
+                                    <li class="breadcrumb-link active">Users</li>
                                 </ul>
                             </div>
                         </div>
@@ -49,49 +49,46 @@
                                                     <th>
                                                         <div class="checkbox">
                                                             <input id="checkbox0" type="checkbox">
-                                                            <label for="checkbox0"></label>
+                                                            <label for="checkbox"></label>
                                                         </div>
                                                     </th>
                                                     <th>S/N</th>
-                                                    <th>Image</th>
-                                                    <th>Title</th>
-                                                    <th>Content</th>
-                                                    <th>Time</th>
-                                                    <th>Category</th>
-                                                    <th>Author</th>
+                                                    <th>Username</th>
+                                                    <th>Email</th>
+                                                    <th>Time Created</th>
+                                                    <th>User Type</th>
                                                     <th>Actions</th>
                                                 </tr>  
                                                 </thead>  
                                                 <tbody>  
                                                 <?php
-                                                $countnum = 0;
+                                                $countnum = 1;
                                                 foreach ($data as $row) :                                                    
-                                                echo $row['article_status'] == 0 ? "<tr style='background:#f1f2f6; '>" : "<tr>";
-                                                $date=date_create($row['article_created_time']);
+                                                echo $row['userstatus'] == 0 ? "<tr style='background:#f1f2f6; '>" : "<tr>";
+                                                $date=date_create($row['created_at']);
                                                 $countnum++
                                                 ?>
                                                     <td>
 														<div class="checkbox">
-															<input id="checkbox<?= $countnum ?>" type="checkbox" name="<?php echo $row['article_id'] ?>">
+															<input id="checkbox<?= $countnum ?>" type="checkbox" name="<?= $row['id'] ?>">
 															<label for="checkbox<?= $countnum ?>"></label>
 														</div>
 													</td>
-                                                    <td><?php echo $countnum ?></td>
                                                     <td>
-                                                        <span >
-                                                            <img src="../img/article/<?php echo $row['article_image'] ?>" style="width: 100px; height: auto;">
-                                                        </span>
+                                                        <?= $countnum++ ?>
                                                     </td>
                                                     <td style="font-weight: bold;">
-                                                        <?php echo strip_tags(substr($row['article_title'], 0, 15)) . "..." ?>
-                                                        <?php //echo $row['article_title'] ?>
+                                                        <?= $row['username'] ?>
                                                     </td>
                                                     <td>
-                                                        <?php echo strip_tags(substr($row['article_content'], 0, 25)) . "..." ?>
+                                                        <a href="mailto:<?= $row['email'] ?>"><?= $row['email'] ?></a>
                                                     </td>
-                                                    <td><?php echo date_format($date, "D, M Y H:i:s") ?></td>
-                                                    <td><?php echo $row['category_name'] ?></td>
-                                                    <td style="font-weight: bold;"><?php echo $row['author_fullname'] ?></td>
+                                                    <td>
+                                                        <?= date_format($date, "D, M Y H:i:s") ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $row['type'] == 1 ? "<p style='font-weight: bold; color:dodgerblue;'>Admin</p>" : "<p>User</p>"; ?>
+                                                    </td>
                                                     <td class="relative">
                                                         <a class="action-btn " href="javascript:void(0); ">
                                                             <svg class="default-size "  viewBox="0 0 341.333 341.333 ">
@@ -109,33 +106,15 @@
                                                         <div class="action-option ">
                                                             <ul>
                                                                 <li>
-                                                                    <a href="../post-single.php?id=<?php echo $row['article_id'] ?>" target="_blank">
-                                                                        <i class="fa fa-eye" aria-hidden="true"></i> View
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="update_post.php?id=<?php echo $row['article_id'] ?> ">
-                                                                        <i class="far fa-edit mr-2" aria-hidden="true"></i> Edit
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="../assets/delete.php?type=article&id=<?php echo $row['article_id'] ?> ">
+                                                                    <a href="../assets/delete.php?type=article&id=<?= $row['article_id'] ?> ">
                                                                         <i class="far fa-trash-alt mr-2" aria-hidden="true"></i> Delete
                                                                     </a>
                                                                 </li>
-                                                                <?php if($row['article_status'] == 0){ ?>
                                                                 <li>
-                                                                    <a href="../assets/publish.php?type=article&id=<?php echo $row['article_id'] ?> ">
-                                                                        <i class="far fa-check-square mr-1" aria-hidden="true"></i> Publish
+                                                                    <a href="../assets/unpublish.php?type=user&id=<?= $row['id'] ?> ">
+                                                                        <i class="far fa-check-square mr-1" aria-hidden="true"></i> Ban
                                                                     </a>
                                                                 </li>
-                                                                <?php }else { ?>
-                                                                <li>
-                                                                    <a href="../assets/unpublish.php?type=article&id=<?php echo $row['article_id'] ?> ">
-                                                                        Unpublish
-                                                                    </a>
-                                                                </li>
-                                                                <?php } ?>
                                                             </ul>
                                                         </div>
                                                     </td>

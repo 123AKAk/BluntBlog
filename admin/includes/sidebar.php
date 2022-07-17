@@ -93,7 +93,7 @@
                         </a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="inbox.php">
+                                <a href="add_author.php">
                                     <span class="icon-dash">
                                     </span>
                                     <span class="menu-text">
@@ -102,7 +102,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="email-template.php">
+                                <a href="authors.php">
                                     <span class="icon-dash">
                                     </span>
                                     <span class="menu-text">
@@ -114,7 +114,7 @@
                     </li>
 
                     <li>
-                        <a href="javascript:void(0);">
+                        <a href="users.php">
                             <span class="icon-menu feather-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             </span>
@@ -125,7 +125,7 @@
                     </li>
 
                     <li class="active-li">
-                        <a href="javascript:void(0);">
+                        <a href="newsletter.php">
                             <span class="icon-menu feather-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                             </span>

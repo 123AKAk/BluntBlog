@@ -4,9 +4,9 @@
     include 'includes/sidebar.php';
 
     // Get all Articles Data
-    $stmt = $conn->prepare("SELECT * FROM category");
+    $stmt = $conn->prepare("SELECT * FROM author");
     $stmt->execute();
-    $categories = $stmt->fetchAll();
+    $authors = $stmt->fetchAll();
 
 ?>
         <!-- Container Start -->
@@ -17,14 +17,14 @@
                     <div class="colxl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-title-wrapper">
                             <div class="page-title-box">
-                                <h2 class="page-title bold">All Categories</h2>
+                                <h2 class="page-title bold">All Authors</h2>
                             </div>
                             <div class="breadcrumb-list">
                                 <ul>
                                     <li class="breadcrumb-link">
                                         <a href="index.php"><i class="fas fa-home mr-2"></i>Home</a>
                                     </li>
-                                    <li class="breadcrumb-link active">All Categories</li>
+                                    <li class="breadcrumb-link active">All Authors</li>
                                 </ul>
                             </div>
                         </div>
@@ -53,34 +53,60 @@
 														</div>
 													</th>
                                                     <th>S/N</th>
-                                                    <th scope='col'>Name</th>
-                                                    <th scope='col'>Image</th>
-                                                    <th scope='col'>Color</th>
-                                                    <th scope='col' colspan="2">Actions</th>
+                                                    <th scope='col'>Full Name</th>
+                                                    <th scope='col'>Description</th>
+                                                    <th scope='col'>Avatar</th>
+                                                    <th scope='col'>Twitter</th>
+                                                    <th scope='col'>Instagram</th>
+                                                    <th scope='col'>Facebook</th>
+                                                    <th scope='col'>Email</th>
+                                                    <th scope='col' colspan="3">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php
                                                 $countnum = 1;
-                                                foreach ($categories as $category) :
+                                                foreach ($authors as $author) :
                                                     echo "<tr>";
                                                     $countnum++
                                                     ?>
                                                     <td>
 														<div class="checkbox">
-															<input id="checkbox<?= $countnum ?>" type="checkbox" name="<?= $category['category_id'] ?>">
-															<label for="checkbox<?= $countnum ?>"></label>
+															<input id="checkbox<?= $countnum ?>" type="checkbox" name="<?= $author['author_id'] ?>">
+															<label for="checkbo<?= $countnum ?>"></label>
 														</div>
 													</td>
                                                     <td><?= $countnum ?></td>
-                                                    <td><?= $category['category_name'] ?></td>
+                                                    <td>
+                                                        <?= $author['author_fullname'] ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= strip_tags(substr($author['author_desc'], 0, 15)) . "..." ?>
+                                                    </td>
                                                     <td>
                                                         <span >
-                                                            <img src="../img/category/<?= $category['category_image'] ?>" style="width: 100px; height: auto;">
+                                                            <img src="../img/avatar/<?= $author['author_avatar'] ?>" style="width: 100px; height: auto;">
                                                         </span>
                                                     </td>
-                                                    <td class="">
-                                                        <div style="width: 40px; height: 10px; background-color: <?= $category['category_color'] ?>"></div>
+                                                    <td>
+                                                        <a href="https://twitter.com/<?= $author['author_twitter'] ?>" target="_blank">
+                                                            <i class="fa fa-twitter"></i> <?= $author['author_twitter'] ?>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="https://instagram.com/<?= $author['auth_instagram'] ?>" target="_blank">
+                                                            <i class="fa fa-instagram"></i> <?= $author['auth_instagram'] ?>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="https://facebook.com/<?= $author['auth_facebook'] ?>" target="_blank">
+                                                            <i class="fa fa-facebook"></i> <?= $author['auth_facebook'] ?>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="mailto:<?= $author['author_email'] ?>" target="_blank">
+                                                            <i class="fa fa-mail"></i> <?= $author['author_email'] ?>
+                                                        </a>
                                                     </td>
                                                     <td class="relative">
                                                         <a class="action-btn " href="javascript:void(0); ">
@@ -99,15 +125,21 @@
                                                         <div class="action-option ">
                                                             <ul>
                                                                 <li>
-                                                                    <a href="update_category.php?id=<?= $category['category_id'] ?> ">
+                                                                    <a href="../author.php?authid=<?= $author['author_id'] ?>" target="_blank">
+                                                                        <i class="fa fa-eye" aria-hidden="true"></i> View
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="update_author.php?id=<?= $author['author_id'] ?> ">
                                                                         <i class="far fa-edit mr-2" aria-hidden="true"></i> Edit
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="../assets/delete.php?type=category&id=<?= $category['category_id'] ?> ">
+                                                                    <a href="../assets/delete.php?type=author&id=<?= $author['author_id'] ?> ">
                                                                         <i class="far fa-trash-alt mr-2" aria-hidden="true"></i> Delete
                                                                     </a>
                                                                 </li>
+
                                                             </ul>
                                                         </div>
                                                     </td>

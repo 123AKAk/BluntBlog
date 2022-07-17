@@ -102,8 +102,8 @@ if ($conn) {
                         "author_desc" => test_input($_POST["authDesc"]),
                         "author_email" =>  test_input($_POST["authEmail"]),
                         "author_twitter" =>  test_input($_POST["authTwitter"]),
-                        "author_github" => test_input($_POST["authGithub"]),
-                        "author_link" => test_input($_POST["authLinkedin"]),
+                        "auth_instagram" => test_input($_POST["authInstagram"]),
+                        "auth_facebook" => test_input($_POST["authFacebook"]),
                         "author_avatar" => test_input($_FILES["authImage"]["name"])
                     );
 
