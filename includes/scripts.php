@@ -19,5 +19,12 @@
     <!-- cdn -->
     <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
 
+    <script>
+        function savepost()
+        {
+            alert("Feature not Available yet");
+        }
+    </script>
+
 </body>
 </html>

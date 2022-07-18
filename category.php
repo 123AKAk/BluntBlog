@@ -46,7 +46,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-heading-2-title ">
-                            <h1> <?= $catID == "" ? "" : $category['category_name'] ?>  </h1>
+                            <h1> <?= $catID != "" ? "Category cannot be found" : $category['category_name'] ?>  </h1>
                             <p class="links"><a href="index.php">Home <i class="las la-angle-right"></i></a> Category(s)</p>
                         </div>
                     </div>  
@@ -98,7 +98,7 @@
                     </div>
                    
                     <!--pagination-->
-                    <div class="pagination">
+                    <!-- <div class="pagination">
                         <div class="pagination-area text-left">
                             <div class="pagination-list">
                                 <ul class="list-inline">
@@ -111,8 +111,8 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                    
+                    </div> -->
+                    <br>
                 </div>
                 <!--/-->
 

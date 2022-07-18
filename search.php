@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-heading-2-title text-left">
-                            <h2>Search resultats for : <?= $keywrd ?></h2>
+                            <h2>Search result(s) for : <?= $keywrd ?></h2>
                             <p class="desc"><?= $number_of_rows ?> Posts were found for keyword <strong><?= $keywrd ?></strong></p>
                         </div>
                     </div>  

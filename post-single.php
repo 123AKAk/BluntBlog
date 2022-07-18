@@ -7,14 +7,19 @@
     }
     
     include 'includes/header.php';
-    include 'includes/navbar.php';
-
+    
     $article_id = $components->unprotect($_GET['id']);
-
+    
     // Get Article Info
     $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN `author` ON `article`.id_author = `author`.author_id  WHERE `article_id` = ?");
     $stmt->execute([$article_id]);
     $article = $stmt->fetch();
+    
+    if(empty($article))
+    {
+        header("location: 404.php?err=Post has been Deleted, cannot be found");
+        exit;
+    }
     
     // Get Category of article
     $stmt = $conn->prepare("SELECT * FROM `category` WHERE `category_id` = ?");
@@ -35,17 +40,18 @@
     $stmt = $conn->prepare("SELECT * FROM `article` WHERE `article_id` > '$article_id' AND `id_categorie` = ? ORDER BY `article_id` DESC LIMIT 1");
     $stmt->execute([$article["id_categorie"]]);
     $next_article = $stmt->fetchAll();
-
+    
     // Get Comments with total comments
     $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN `comment` WHERE `article`.`article_id`= `comment`.`id_article` AND `article`.`article_id` = ? ORDER BY comment_id DESC");
     $stmt->execute([$article_id]);
     $comments = $stmt->fetchAll();
     $number_of_rows = $stmt->rowCount();
+    
+    include 'includes/navbar.php';
+    ?> 
 
-?> 
-
-    <!--section-heading-->
-    <div class="section-heading " >
+<!--section-heading-->
+<div class="section-heading " >
         <div class="container-fluid">
             <div class="section-heading-2">
                 <div class="row">
@@ -99,6 +105,18 @@
                                     <li class="post-date"> <span class="line"></span>
                                         <?= date_format(date_create($article["article_created_time"]), "F d, Y ") ?>
                                     </li>
+                                    <li>
+                                        <span class="line"></span>
+                                        <a title="Views">
+                                            <i class="fab fa-eye" style="background-color: gray;"></i> 0 Views
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <span class="line"></span>
+                                        <a title="Save Post" onclick="savepost()" href="javascript:void(0);">
+                                            <i class="fab fa-save" style="background-color: gray;"></i> Save Post
+                                        </a>
+                                    </li>
                                 </ul>
                                 
                             </div>
@@ -114,7 +132,7 @@
                                     <div class="">
                                         <ul class="list-inline">
                                             <li>
-                                                <a>Share on :</a>
+                                                <a>Share To : </a>
                                             </li>
                                             <li>
                                                 <a title="Facebook" id="singleshare1" data-sharer="facebook" data-hashtag="<?= $sitehashtag ?>">
@@ -133,22 +151,22 @@
                                             </li>
                                             <li>
                                                 <a title="Whatsapp" id="singleshare4" data-sharer="whatsapp" data-title="<?= $sitemsg ?>" >
-                                                    <i class="fab fa-whatsapp"></i>
+                                                    <i class="fab fa-whatsapp" style="background-color: #25D366;"></i>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a title="Linkedin" id="singleshare5" data-sharer="linkedin" >
-                                                    <i class="fab fa-linkedin"></i>
+                                                    <i class="fab fa-linkedin" style="background-color: #0072b1;"></i>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a title="Telegram" id="singleshare7" data-sharer="telegram" data-title="<?= $sitemsg ?>" >
-                                                    <i class="fab fa-telegram"></i>
+                                                    <i class="fab fa-telegram" style="background-color: #229ED9;"></i>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a title="Email" id="singleshare6" data-sharer="email" data-title="<?= $sitemsg ?>" data-subject="Hey! Check out that URL" data-to="some@email.com">
-                                                    <i class="fab fa-mail"></i>
+                                                    <i class="fab fa-mailchimp" style="background-color: gray;"></i>
                                                 </a>
                                             </li>
                                             <!-- <li>

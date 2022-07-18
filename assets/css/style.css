@@ -1049,6 +1049,21 @@ ul {
   background-color: #1dcaff;
 }
 
+.fa-whatsapp, 
+.color-whatsapp {
+  background-color: #25D366;
+}
+
+.fa-linkedin, 
+.color-linkedin {
+  background-color: #0072b1;
+}
+
+.fa-telegram, 
+.color-telegram {
+  background-color: #229ED9;
+}
+
 .fa-dribbble,
 .color-dribbble {
   background-color: #f43079;

@@ -33,7 +33,7 @@ function delete($conn, $table, $id, $goto)
         // use exec() because no results are returned
         $conn->exec($sql);
         //echo "$table Deleted Successfully";
-        $_SESSION["adminsuc"] = "Post Deleted Successfully";
+        $_SESSION["adminsuc"] = $table." Deleted Successfully";
     } catch (PDOException $e) {
         //echo $sql . "<br>" . $e->getMessage();
         $_SESSION["adminerra"] = $sql . "<br>" . $e->getMessage();
