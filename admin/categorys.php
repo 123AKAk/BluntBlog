@@ -3,7 +3,7 @@
     include 'includes/navbar.php';
     include 'includes/sidebar.php';
 
-    // Get all Articles Data
+    // Get all CATEGORY Data
     $stmt = $conn->prepare("SELECT * FROM category");
     $stmt->execute();
     $categories = $stmt->fetchAll();

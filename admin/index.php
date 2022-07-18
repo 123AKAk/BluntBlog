@@ -2,6 +2,30 @@
     include 'includes/header.php';
     include 'includes/navbar.php';
     include 'includes/sidebar.php';
+
+    // Get all ACTIVE users 
+    $stmt = $conn->prepare("SELECT * FROM users WHERE userstatus = 1 ORDER BY id DESC");
+    $stmt->execute();
+    $data = $stmt->fetchAll();
+    $userscount = $stmt->rowCount();
+
+    // Get all POST
+    $stmt = $conn->prepare("SELECT * FROM article");
+    $stmt->execute();
+    $data = $stmt->fetchAll();
+    $postcount = $stmt->rowCount();
+
+    // Get all AUTHOR Data
+    $stmt = $conn->prepare("SELECT * FROM author");
+    $stmt->execute();
+    $authors = $stmt->fetchAll();
+    $authorcount = $stmt->rowCount();
+
+    // Get all NEWSLETTER Data
+    $stmt = $conn->prepare("SELECT * FROM newsletters");
+    $stmt->execute();
+    $authors = $stmt->fetchAll();
+    $emailcount = $stmt->rowCount();
 ?>
         <!-- Container Start -->
         <div class="page-wrapper">
@@ -34,7 +58,7 @@
                                 <h3>Active Users</h3>
                                 <div class="icon-info-text">
                                     <h5 class="ad-title"></h5>
-                                    <h4 class="ad-card-title">66</h4>
+                                    <h4 class="ad-card-title"><?= $userscount ?></h4>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +70,7 @@
                                 <h3>Blog Post(s)</h3>
                                 <div class="icon-info-text">
                                     <h5 class="ad-title"></h5>
-                                    <h4 class="ad-card-title">15</h4>
+                                    <h4 class="ad-card-title"><?= $postcount ?></h4>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +82,7 @@
                                 <h3>Author(s)</h3>
                                 <div class="icon-info-text">
                                     <h5 class="ad-title">No. of Authors</h5>
-                                    <h4 class="ad-card-title">4</h4>
+                                    <h4 class="ad-card-title"><?= $authorcount ?></h4>
                                 </div>
                             </div>
                         </div>
@@ -67,10 +91,10 @@
                     <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card ad-info-card">
                             <div class="card-body dd-flex align-items-center">
-                                <h3>Emails</h3>
+                                <h3>Email(s)</h3>
                                 <div class="icon-info-text">
                                     <h5 class="ad-title"></h5>
-                                    <h4 class="ad-card-title">10</h4>
+                                    <h4 class="ad-card-title"><?= $emailcount ?></h4>
                                 </div>
                             </div>
                         </div>

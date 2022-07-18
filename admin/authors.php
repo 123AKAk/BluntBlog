@@ -3,7 +3,7 @@
     include 'includes/navbar.php';
     include 'includes/sidebar.php';
 
-    // Get all Articles Data
+    // Get all AUTHOR Data
     $stmt = $conn->prepare("SELECT * FROM author");
     $stmt->execute();
     $authors = $stmt->fetchAll();

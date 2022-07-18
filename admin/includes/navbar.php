@@ -48,8 +48,8 @@
                             </a>
                             <div class="user-info-box">
                                 <div class="drop-down-header">
-                                    <h4>Eyo Akak</h4>
-                                    <p>Web Developer</p>
+                                    <h4><?= $username ?></h4>
+                                    <p>Admin</p>
                                 </div>
                                 <ul>
                                     <li>
@@ -57,11 +57,17 @@
                                             <i class="far fa-edit"></i> Edit Profile
                                         </a>
                                     </li>
+                                    <?php if($username == "admin")
+                                    {
+                                    ?>
                                     <li>
                                         <a href="setting.php">
                                             <i class="fas fa-cog"></i> Settings
                                         </a>
                                     </li>
+                                    <?php
+                                    }
+                                    ?>
                                     <li>
                                         <a href="../logout.php">
                                             <i class="fas fa-sign-out-alt"></i> logout

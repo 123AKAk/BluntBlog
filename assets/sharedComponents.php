@@ -96,6 +96,22 @@ class SharedComponents
         }
     }
 
+    function returnname($id, $pdo)
+    {
+        $sql = "SELECT * FROM users WHERE id = :id";
+        if ($stmt = $pdo->prepare($sql)) {
+            $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+            if ($stmt->execute()) {
+                // Check if email exists, if yes then verify password
+                if ($stmt->rowCount() == 1){
+                    if ($row = $stmt->fetch()) {
+                        return $row["username"];
+                    }
+                }
+            }
+        }
+    }
+
     function test_input($data){
         $data = trim($data);
         $data = stripslashes($data);

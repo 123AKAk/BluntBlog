@@ -3,7 +3,7 @@
     include 'includes/navbar.php';
     include 'includes/sidebar.php';
 
-    // Get all Articles Data
+    // Get all users Data
     $stmt = $conn->prepare("SELECT * FROM users ORDER BY id DESC");
     $stmt->execute();
     $data = $stmt->fetchAll();
@@ -49,7 +49,7 @@
                                                     <th>
                                                         <div class="checkbox">
                                                             <input id="checkbox0" type="checkbox">
-                                                            <label for="checkbox"></label>
+                                                            <label for="checkbox0"></label>
                                                         </div>
                                                     </th>
                                                     <th>S/N</th>
@@ -62,7 +62,7 @@
                                                 </thead>  
                                                 <tbody>  
                                                 <?php
-                                                $countnum = 1;
+                                                $countnum = 0;
                                                 foreach ($data as $row) :                                                    
                                                 echo $row['userstatus'] == 0 ? "<tr style='background:#f1f2f6; '>" : "<tr>";
                                                 $date=date_create($row['created_at']);
@@ -75,7 +75,7 @@
 														</div>
 													</td>
                                                     <td>
-                                                        <?= $countnum++ ?>
+                                                        <?= $countnum ?>
                                                     </td>
                                                     <td style="font-weight: bold;">
                                                         <?= $row['username'] ?>

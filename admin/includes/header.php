@@ -11,6 +11,7 @@
             $_SESSION["admin_blunt_blog_user_loggedin_"] = $components->protect($_SESSION["admin_blunt_blog_user_loggedin_"]);
             $id = $components->unprotect($_SESSION["blunt_blog_user_status_"]);
             $result = $components->checkuser($id, $pdo);
+            $username = $components->returnname($id, $pdo);
             if($result != 1)
             {
                 header("location: ../logout.php");
