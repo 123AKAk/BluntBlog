@@ -9,14 +9,12 @@
     include 'includes/header.php';
     include 'includes/navbar.php';
     
-    //$stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE name LIKE :keyword OR price LIKE :keyword OR description LIKE :keyword OR slug LIKE :keyword WHERE category_id = ?");
-
     $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE article_title LIKE :keyword OR category_name LIKE :keyword OR author_fullname LIKE :keyword");
     $stmt->bindValue(':keyword', '%' . $keywrd . '%', PDO::PARAM_STR);
     $stmt->execute();
     $searchdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $number_of_rows = $stmt->rowCount();
-    
+
     session_start();
 
     
