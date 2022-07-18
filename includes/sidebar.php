@@ -16,7 +16,7 @@
                                     <h5>Search</h5>
                                 </div>
                                 <div class=" widget-search">
-                                    <form action="https://assiagroupe.site/html/Oredoo/search.php">
+                                    <form class="search-form" action="search.php" method="POST" enctype="multipart/form-data">
                                         <input type="search" id="gsearch" name="gsearch" placeholder="Search ....">
                                         <a href="search.php" class="btn-submit"><i class="las la-search"></i></a>
                                     </form>
@@ -33,8 +33,8 @@
                             <!--newslatter-->
                             <div class="widget widget-newsletter">
                                 <h5>Subscribe To Our Newsletter</h5>
-                                 <p>No spam, notifications only about new products, updates.</p>
-                                <form action="#" class="newslettre-form">
+                                 <p>No spam, notifications only about new posts, updates.</p>
+                                <form action="subnewsletter.php" class="newslettre-form" method="POST" enctype="multipart/form-data">
                                     <div class="form-flex">
                                         <div class="form-group">
                                             <input type="email" class="form-control" placeholder="Your Email Adress" required="required">

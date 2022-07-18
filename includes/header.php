@@ -44,6 +44,22 @@ if (isset($_SESSION["blunt_blog_user_loggedin_"])){
     <!-- main style -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/custom.css">
+
+    <?php include "assets/db.php"; ?>
+
+    <script>
+        function sharefunc()
+        {
+            var aurl = window.location.href
+            document.getElementById("singleshare1").setAttribute("data-url", ""+aurl);
+            document.getElementById("singleshare2").setAttribute("data-url", ""+aurl);
+            document.getElementById("singleshare3").setAttribute("data-url", ""+aurl);
+            document.getElementById("singleshare4").setAttribute("data-url", ""+aurl);
+            document.getElementById("singleshare5").setAttribute("data-url", ""+aurl);
+            document.getElementById("singleshare6").setAttribute("data-url", ""+aurl);
+            document.getElementById("singleshare67").setAttribute("data-url", ""+aurl);
+        }
+    </script>
 </head>
 
-<body>
+<body onload="sharefunc()">

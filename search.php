@@ -15,6 +15,7 @@
     $stmt->bindValue(':keyword', '%' . $keywrd . '%', PDO::PARAM_STR);
     $stmt->execute();
     $searchdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $number_of_rows = $stmt->rowCount();
     
     session_start();
 
@@ -30,7 +31,7 @@
                     <div class="col-lg-12">
                         <div class="section-heading-2-title text-left">
                             <h2>Search resultats for : <?= $keywrd ?></h2>
-                            <p class="desc">8 Articles were found for keyword  <strong> branding</strong></p>
+                            <p class="desc"><?= $number_of_rows ?> Posts were found for keyword <strong><?= $keywrd ?></strong></p>
                         </div>
                     </div>  
                 </div>

@@ -17,7 +17,7 @@
     <!-- Sharer.js is a lightweight js lib to create custom social share components on DOM elements for your website. No dependencies. -->
     <script src="assets/js/sharer.js-main/sharer.min.js"></script>
     <!-- cdn -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
 
 </body>
 </html>

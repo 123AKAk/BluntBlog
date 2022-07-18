@@ -5262,7 +5262,7 @@ input:checked + .slider:before {
 .dark .post-single-content .quote p,
 .dark .post-single-content .quote i,
 .dark .post-single-bottom .tags p,
-.dark .post-single-bottom .social-media p,
+.dark .post-single-bottom .social-media p .menu-outer,
 .dark .shop-item p,
 .dark .shop-item h5 a:hover,
 .dark .shop-single-content .controller .quantity .btn-action i,
@@ -5525,4 +5525,46 @@ input:checked + .slider:before {
   .dark .header-navbar .navbar-collapse {
     background-color: #101213;
   }
+}
+
+/* added by eyo */
+.menu-outer ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.menu-outer li {
+  float: left;
+}
+
+.menu-outer li a {
+  display: block;
+  padding: 2px;
+  text-align: center;
+}
+.menu-outer li a i {
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 25px;
+  color: #ffffff;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: block;
+  text-align: center;
+  margin-right: 2px;
+  border: 0px;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+.menu-outer li a i:hover {
+  opacity: 0.5;
+  color: #ffffff;
+}
+
+.menu-outer li a:hover {
+  /* background-color: #111111; */
 }

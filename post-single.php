@@ -1,3 +1,4 @@
+
 <?php
     if(!isset($_GET['id']))
     {
@@ -108,67 +109,103 @@
                             </div>
                             
                             <!--post-single-bottom-->
-                            <div class="post-single-bottom"> 
-                                <div class="tags">
-                                    <p>Tags:</p>
-                                    <ul class="list-inline">
-                                        <li >
-                                            <a href="blog-layout-2.php">brading</a>
-                                        </li>
-                                    </ul>
+                            <div class="post-single-bottom">
+                                <div class="menu-outer">
+                                    <div class="">
+                                        <ul class="list-inline">
+                                            <li>
+                                                <a>Share on :</a>
+                                            </li>
+                                            <li>
+                                                <a title="Facebook" id="singleshare1" data-sharer="facebook" data-hashtag="<?= $sitehashtag ?>">
+                                                    <i class="fab fa-facebook"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a title="Twitter" id="singleshare2" data-sharer="twitter" data-title="<?= $sitemsg ?>" data-hashtags="<?= $sitehashtag ?>" >
+                                                    <i class="fab fa-twitter"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a title="Pinterest" id="singleshare3" data-sharer="pinterest" >
+                                                    <i class="fab fa-pinterest"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a title="Whatsapp" id="singleshare4" data-sharer="whatsapp" data-title="<?= $sitemsg ?>" >
+                                                    <i class="fab fa-whatsapp"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a title="Linkedin" id="singleshare5" data-sharer="linkedin" >
+                                                    <i class="fab fa-linkedin"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a title="Telegram" id="singleshare7" data-sharer="telegram" data-title="<?= $sitemsg ?>" >
+                                                    <i class="fab fa-telegram"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a title="Email" id="singleshare6" data-sharer="email" data-title="<?= $sitemsg ?>" data-subject="Hey! Check out that URL" data-to="some@email.com">
+                                                    <i class="fab fa-mail"></i>
+                                                </a>
+                                            </li>
+                                            <!-- <li>
+                                                <a href="#">
+                                                    <i class="fab fa-instagram"></i>
+                                                </a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="social-media">
+                                <!-- <div class="social-media">
                                     <p>Share on :</p>
-                                    <ul class="list-inline">
+                                    <ul class="">
                                         <li>
-                                            <a data-sharer="facebook" data-hashtag="hashtag" data-url="http://localhost:8080/allblogs/Oredoo/post-single.php?id=45">
+                                            <a id="singleshare1" data-sharer="facebook" data-hashtag="hashtag" >
                                                 <i class="fab fa-facebook"></i>
                                             </a>
                                         </li>
-                                        <!-- <li>
-                                            <a href="#">
-                                                <i class="fab fa-instagram"></i>
-                                            </a>
-                                        </li> -->
                                         <li>
-                                            <a data-sharer="twitter" data-title="Check out!" data-hashtags="awesome, blunt" data-url="http://localhost:8080/allblogs/Oredoo/post-single.php?id=45">
+                                            <a id="singleshare2" data-sharer="twitter" data-title="Check out!" data-hashtags="awesome, blunt" >
                                                 <i class="fab fa-twitter"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a data-sharer="pinterest" data-url="http://localhost:8080/allblogs/Oredoo/post-single.php?id=45">
+                                            <a id="singleshare3" data-sharer="pinterest" >
                                                 <i class="fab fa-pinterest"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a data-sharer="whatsapp" data-title="Checkout Sharer.js!" data-url="http://localhost:8080/allblogs/Oredoo/post-single.php?id=45">
+                                            <a id="singleshare4" data-sharer="whatsapp" data-title="Checkout Sharer.js!" >
                                                 <i class="fab fa-whatsapp"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a data-sharer="linkedin" data-url="http://localhost:8080/allblogs/Oredoo/post-single.php?id=45">
+                                            <a id="singleshare5" data-sharer="linkedin" >
                                                 <i class="fab fa-linkedin"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a data-sharer="email" data-title="Awesome Url" data-url="http://localhost:8080/allblogs/Oredoo/post-single.php?id=45" data-subject="Hey! Check out that URL" data-to="some@email.com">
+                                            <a id="singleshare6" data-sharer="email" data-title="Awesome Url" data-subject="Hey! Check out that URL" data-to="some@email.com">
                                                 <i class="fab fa-email"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a data-sharer="telegram" data-title="Checkout Sharer.js!" data-url="https://ellisonleao.github.io/sharer.js/" >
+                                            <a id="singleshare7" data-sharer="telegram" data-title="Checkout Sharer.js!" >
                                                 <i class="fab fa-telegram"></i>
                                             </a>
                                         </li>
                                     </ul>
-                                </div>                      
+                                </div> -->
                             </div>
 
                             <!--post-single-author-->
                             <div class="post-single-author ">
                                 <div class="authors-info">
                                     <div class="image">
-                                        <a href="author.php" class="image">
+                                        <a href="author.php?authid=<?= $article['author_id'] ?>" class="image">
                                             <img src="img/avatar/<?= $article['author_avatar'] ?>" alt="">
                                         </a>
                                     </div>
@@ -267,7 +304,7 @@
                             <!--post-single-comments-->
                             <div class="post-single-comments">
                                 <!--Comments-->
-                                <h4 ><?= $number_of_rows ?> Comments</h4>
+                                <h4><?= $number_of_rows ?> Comments</h4>
                                 <ul class="comments">
 
                                 <?php foreach ($comments as $comment) : ?>
@@ -363,5 +400,7 @@
 
 <?php
     include 'includes/footer.php';
+?>
+<?php
     include 'includes/scripts.php';
 ?> 
