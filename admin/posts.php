@@ -78,8 +78,8 @@
 													</td>
                                                     <td><?php echo $countnum ?></td>
                                                     <td>
-                                                        <span >
-                                                            <img src="../img/article/<?php echo $row['article_image'] ?>" style="width: 100px; height: auto;">
+                                                        <span>
+                                                            <img src="../img/article/<?= $row['article_image'] == "" ? "noimage.jpg" : $row['article_image'] ?>" style="width: 100px; height: auto;">
                                                         </span>
                                                     </td>
                                                     <td style="font-weight: bold;">
@@ -109,7 +109,7 @@
                                                         <div class="action-option ">
                                                             <ul>
                                                                 <li>
-                                                                    <a href="../post-single.php?id=<?php echo $row['article_id'] ?>" target="_blank">
+                                                                    <a href="../post-single.php?id=<?php echo $components->protect($row['article_id']) ?>" target="_blank">
                                                                         <i class="fa fa-eye" aria-hidden="true"></i> View
                                                                     </a>
                                                                 </li>
@@ -118,6 +118,9 @@
                                                                         <i class="far fa-edit mr-2" aria-hidden="true"></i> Edit
                                                                     </a>
                                                                 </li>
+                                                                <?php if($type == 2)
+                                                                {
+                                                                ?>
                                                                 <li>
                                                                     <a href="../assets/delete.php?type=article&id=<?php echo $row['article_id'] ?> ">
                                                                         <i class="far fa-trash-alt mr-2" aria-hidden="true"></i> Delete
@@ -125,17 +128,20 @@
                                                                 </li>
                                                                 <?php if($row['article_status'] == 0){ ?>
                                                                 <li>
-                                                                    <a href="../assets/publish.php?type=article&id=<?php echo $row['article_id'] ?> ">
+                                                                    <a href="../assets/update.php?type=publish&id=<?php echo $row['article_id'] ?> ">
                                                                         <i class="far fa-check-square mr-1" aria-hidden="true"></i> Publish
                                                                     </a>
                                                                 </li>
                                                                 <?php }else { ?>
                                                                 <li>
-                                                                    <a href="../assets/unpublish.php?type=article&id=<?php echo $row['article_id'] ?> ">
+                                                                    <a href="../assets/update.php?type=unpublish&id=<?php echo $row['article_id'] ?> ">
                                                                         Unpublish
                                                                     </a>
                                                                 </li>
                                                                 <?php } ?>
+                                                                <?php 
+                                                                }
+                                                                ?>
                                                             </ul>
                                                         </div>
                                                     </td>

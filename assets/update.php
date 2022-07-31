@@ -6,12 +6,13 @@ session_start();
 // Get type from header
 $type = $_GET['type'];
 $urlId = $_GET["id"];
+if(isset($_GET['img']))
 $urlImage = $_GET['img'];
 
-if ($conn) {
-
-    if (isset($_POST["update"])) {
-
+if ($conn)
+{
+    if (isset($_POST["update"])) 
+    {
         switch ($type) {
             case "article":
 
@@ -103,6 +104,7 @@ if ($conn) {
                 // header("refresh:1; url=../allCategories.php");
 
                 break;
+
             case "author":
                 // Update DataBase
                 $fullName = test_input($_POST["authName"]);
@@ -122,26 +124,111 @@ if ($conn) {
 
                 try {
                     $sql = "UPDATE `author`
-                        SET `author_fullname`= ?, `author_desc`= ?,`author_email`=?, `author_twitter`=?, `author_github`= ?, `author_link`= ?, `author_avatar`= ?
+                        SET `author_fullname`= ?, `author_desc`= ?,`author_email`=?, `author_twitter`=?, `auth_instagram`= ?, `auth_facebook`= ?, `author_avatar`= ?
                         WHERE `author_id` = ?";
 
                     $stmt = $conn->prepare($sql);
 
                     $stmt->execute([$fullName, $description, $email, $twitter, $github, $linkedin, $imageName, $urlId]);
 
-                    // echo a message to say the UPDATE succeeded
-                    echo "author UPDATED successfully";
+                    //echo "author UPDATED successfully";
+                    $_SESSION["adminsuc"] = "Author UPDATED successfully";
+                    header("Location: ../admin/authors.php", true, 301);
+                    exit;
                 } catch (PDOException $e) {
-                    echo $e->getMessage();
+                    //echo $e->getMessage();
+                    $_SESSION["adminerra"] = $e->getMessage();
+                    header("Location: ../admin/update_author.php?id=$urlId");
+                    exit;
                 }
-
-                // Go to show.php
-                header("Location: ../author.php", true, 301);
-                exit;
                 break;
 
             default:
                 break;
+        }
+    }
+    else
+    {
+        switch($type) 
+        {
+        case "publish":
+            try {
+                $sql = "UPDATE article SET `article_status`= ? WHERE `article_id` = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(["1", $urlId]);
+                //echo "Post Published Successfully";
+                $_SESSION["adminsuc"] = "Post Published Successfully";
+                header("Location: ../admin/posts.php", true, 301);
+                exit;
+            } catch (PDOException $e) {
+                //echo $e->getMessage();
+                $_SESSION["adminerra"] = "Error Publishing Post - ".$e->getMessage();
+                header("Location: ../admin/posts.php", true, 301);
+                exit;
+            }
+            break;
+
+        case "unpublish":
+            try {
+                $sql = "UPDATE `article` SET `article_status`= ? WHERE `article_id` = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([0, $urlId]);
+                
+                //echo "Post Published Successfully";
+                $_SESSION["adminsuc"] = "Post Unpublished Successfully";
+                header("Location: ../admin/posts.php", true, 301);
+                exit;
+            } catch (PDOException $e) {
+                //echo $e->getMessage();
+                $_SESSION["adminerra"] = "Error Unpublishing Post - ".$e->getMessage();
+                header("Location: ../admin/posts.php", true, 301);
+                exit;
+            }
+            break;
+
+        case "banauthor":
+            try {
+                $sql = "UPDATE `author` SET `type`= ? WHERE `author_id` = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([0, $urlId]);
+                
+                //echo "Post Published Successfully";
+                $_SESSION["adminsuc"] = "Author Banned Successfully";
+                header("Location: ../admin/authors.php", true, 301);
+                exit;
+            } catch (PDOException $e) {
+                //echo $e->getMessage();
+                $_SESSION["adminerra"] = "Error Banning Post - ".$e->getMessage();
+                header("Location: ../admin/authors.php", true, 301);
+                exit;
+            }
+            break;
+
+        case "approve":
+            try {
+                $sql = "UPDATE `author` SET `type`= ? WHERE `author_id` = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([1, $urlId]);
+                
+                $_SESSION["adminsuc"] = "Author Approved Successfully";
+                header("Location: ../admin/authors.php", true, 301);
+                exit;
+            } catch (PDOException $e) {
+                //echo $e->getMessage();
+                $_SESSION["adminerra"] = "Error Approving Author - ".$e->getMessage();
+                header("Location: ../admin/authors.php", true, 301);
+                exit;
+            }
+            break;
+
+        default:
+            header("Location: ../admin/./", true, 301);
+                exit;
+            break;
         }
     }
 } else {

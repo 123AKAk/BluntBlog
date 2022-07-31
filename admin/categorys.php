@@ -103,11 +103,17 @@
                                                                         <i class="far fa-edit mr-2" aria-hidden="true"></i> Edit
                                                                     </a>
                                                                 </li>
+                                                                <?php if($type == 2)
+                                                                {
+                                                                ?>
                                                                 <li>
                                                                     <a href="../assets/delete.php?type=category&id=<?= $category['category_id'] ?> ">
                                                                         <i class="far fa-trash-alt mr-2" aria-hidden="true"></i> Delete
                                                                     </a>
                                                                 </li>
+                                                                <?php
+                                                                }
+                                                                ?>
                                                             </ul>
                                                         </div>
                                                     </td>

@@ -86,6 +86,9 @@
                                                     </div>
                                                 </div>
 
+                                                <?php if($type == 2)
+                                                {
+                                                ?>
                                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                                     <div class="form-group s-opt">
                                                         <label for="arAuthor" class="col-form-label">Author</label>
@@ -100,12 +103,27 @@
                                                         </span>
                                                     </div>
                                                 </div>
+                                                <?php
+                                                }
+                                                else
+                                                {
+                                                ?>
+                                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="arAuthor" class="col-form-label">Author Name</label>
+                                                        <input class="form-control" value="<?= $adid ?>" type="text" name="arAuthor" id="arAuthor" readonly hidden />
+                                                        <input value="<?= $username ?>" class="form-control" readonly/>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                }
+                                                ?>
 
 
                                             </div>
 
                                             <div class="form-group mb-0">
-                                                <button class="btn btn-secondary" type="button">Back</button>
+                                                <button class="btn btn-secondary" type="button" onclick="goback()">Back</button>
                                                 <input class="btn btn-primary" type="submit" name="submit">
                                             </div>
                                         </div>

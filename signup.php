@@ -1,9 +1,10 @@
-<?php 
+
+<?php
 require "assets/db.php";
+require "assets/varnames.php";
 require 'assets/sharedComponents.php';
 $components = new SharedComponents();
-?>
-<?php
+
 session_start();
 
 
@@ -111,15 +112,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             require 'assets/sendmail.php';
                             $model = new send_Mail();
                             $mailresult = $model->sendUsersMail($_POST["email"], $password, $_POST["username"], $code, $userid);
-
-                            // echo json_encode($result);
-
-                            // if($mailresult["response"] == true)
-                            // {
-                            // }
-
-                            header("Location: login.php");
-                            exit;
+                            json_encode($result);
+                            if($mailresult["response"] == true)
+                            {
+                                header("Location: login.php?admsg=active");
+                                exit;
+                            }
+                            else
+                                $_SESSION["main_err"] = $mailresult["message"];
                             
                         } catch (PDOException $error) {
                             $_SESSION["main_err"] = "Error: ".$error;

@@ -53,9 +53,9 @@
 														</div>
 													</th>
                                                     <th>S/N</th>
+                                                    <th scope='col'>Avatar</th>
                                                     <th scope='col'>Full Name</th>
                                                     <th scope='col'>Description</th>
-                                                    <th scope='col'>Avatar</th>
                                                     <th scope='col'>Twitter</th>
                                                     <th scope='col'>Instagram</th>
                                                     <th scope='col'>Facebook</th>
@@ -65,9 +65,9 @@
                                             </thead>
                                             <tbody>
                                             <?php
-                                                $countnum = 1;
+                                                $countnum = 0;
                                                 foreach ($authors as $author) :
-                                                    echo "<tr>";
+                                                    echo $author['type'] == 0 ? "<tr style='background:#f1f2f6; '>" : "<tr>";
                                                     $countnum++
                                                     ?>
                                                     <td>
@@ -78,15 +78,15 @@
 													</td>
                                                     <td><?= $countnum ?></td>
                                                     <td>
+                                                        <span >
+                                                            <img src="../img/avatar/<?= $author['author_avatar'] == "" ? "noimage.jpg" : $author['author_avatar'] ?>" style="width: 100px; height: auto;">
+                                                        </span>
+                                                    </td>
+                                                    <td>
                                                         <?= $author['author_fullname'] ?>
                                                     </td>
                                                     <td>
                                                         <?= strip_tags(substr($author['author_desc'], 0, 15)) . "..." ?>
-                                                    </td>
-                                                    <td>
-                                                        <span >
-                                                            <img src="../img/avatar/<?= $author['author_avatar'] ?>" style="width: 100px; height: auto;">
-                                                        </span>
                                                     </td>
                                                     <td>
                                                         <a href="https://twitter.com/<?= $author['author_twitter'] ?>" target="_blank">
@@ -125,7 +125,7 @@
                                                         <div class="action-option ">
                                                             <ul>
                                                                 <li>
-                                                                    <a href="../author.php?authid=<?= $author['author_id'] ?>" target="_blank">
+                                                                    <a href="../author.php?authid=<?=  $components->protect($author['author_id']) ?>" target="_blank">
                                                                         <i class="fa fa-eye" aria-hidden="true"></i> View
                                                                     </a>
                                                                 </li>
@@ -139,6 +139,18 @@
                                                                         <i class="far fa-trash-alt mr-2" aria-hidden="true"></i> Delete
                                                                     </a>
                                                                 </li>
+
+                                                                <?php if($author['type'] != 0){ ?>
+                                                                <li>
+                                                                    <a href="../assets/update.php?type=banauthor&id=<?= $author['author_id'] ?> ">Ban</a>
+                                                                </li>
+                                                                <?php }else { ?>
+                                                                <li>
+                                                                    <a href="../assets/update.php?type=approve&id=<?= $author['author_id'] ?> ">
+                                                                        <i class="far fa-check-square " aria-hidden="true"></i> Accept
+                                                                    </a>
+                                                                </li>
+                                                                <?php } ?>
 
                                                             </ul>
                                                         </div>

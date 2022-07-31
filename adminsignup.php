@@ -1,9 +1,9 @@
 <?php 
 require "assets/db.php";
+require "assets/varnames.php";
 require 'assets/sharedComponents.php';
 $components = new SharedComponents();
-?>
-<?php
+
 session_start();
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
@@ -72,14 +72,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Validate credentials
         if (empty($username_err) && empty($email_err) && empty($password_err) && empty($confrimpassword_err)) {
             // Prepare a select statement
-            $sql = "SELECT * FROM users WHERE email = :email";
+            $sql = "SELECT * FROM author WHERE author_email = :author_email";
 
             if ($stmt = $pdo->prepare($sql)) {
-                // Bind variables to the prepared statement as parameters
-                $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
 
                 // Set parameters
                 $param_email = trim($_POST["email"]);
+
+                // Bind variables to the prepared statement as parameters
+                $stmt->bindParam(":author_email", $param_email, PDO::PARAM_STR);
 
                 // Attempt to execute the prepared statement
                 if ($stmt->execute()) {
@@ -87,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($stmt->rowCount() == 1) {
                         // Display an error message if email exist
                         $email_err = "There is an account with that Email.";
+                        return;
                     }
                     else{
                         $set = 'EYO1BLUNT2AKAK3';
@@ -96,10 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $hashpassword = password_hash($password, PASSWORD_DEFAULT);
 
                         $data = array(
-                            "email" => $components->test_input($_POST["email"]),
-                            "username" => $components->test_input($_POST["username"]),
+                            "author_email" => $components->test_input($_POST["email"]),
+                            "author_fullname" => $components->test_input($_POST["username"]),
                             "password" => $components->test_input($hashpassword),
-                            "type" => $components->test_input("1"),
                             "code" => $components->test_input($code)
                         );
         
@@ -111,22 +112,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $values = $components->implodeArray($prefixed_array);
 
                         try {
-                            $sql = "INSERT INTO users ($columns) VALUES ($values); SELECT LAST_INSERT_ID();";
+                            $sql = "INSERT INTO author ($columns) VALUES ($values); SELECT LAST_INSERT_ID();";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute($data);
-                            $userid = $pdo->lastInsertId();
+                            $userid = $components->protect($pdo->lastInsertId());
 
                             require 'assets/sendmail.php';
                             $model = new send_Mail();
                             $mailresult = $model->sendMail($_POST["email"], $password, $_POST["username"], $code, $userid);
-
-                            // echo json_encode($result);
-
-                            // if($mailresult["response"] == true)
-                            // {
-                            // }
-                            header("Location: adminlogin.php?admsg=active");
-                            exit;
+                            json_encode($mailresult);
+                            if($mailresult["response"] == true)
+                                header("Location: adminlogin.php?admsg=active");
+                            else
+                                $_SESSION["main_err"] = $mailresult["message"];
                         } 
                         catch (PDOException $error) {
                             $_SESSION["main_err"] = "Error: ".$error;
@@ -139,6 +137,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Close statement
                 unset($stmt);
             }
+            else
+            $_SESSION["main_err"] = "Error checking Account Details";
         }
     }
     else
@@ -198,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <hr>
 
                             <div class="form-group">
-                                <input type="text" class="form-control <?= (!empty($username_err)) ? 'is-invalid' : ''; ?>" placeholder="Username*" name="username" value="<?= (!empty($_SESSION["username"])) ? $_SESSION["username"] : ''; ?>">
+                                <input type="text" class="form-control <?= (!empty($username_err)) ? 'is-invalid' : ''; ?>" placeholder="Full Name*" name="username" value="<?= (!empty($_SESSION["username"])) ? $_SESSION["username"] : ''; ?>">
                                 <span class="invalid-feedback"><?= $username_err; ?></span>
                             </div>
 
@@ -230,7 +230,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="form-group">
                                 <button type="submit" class="btn-custom">Sign Up</button>
                             </div>
-                            <p class="form-group text-center">Already have an account? <a href="login.php" class="btn-link">Login</a> </p>
+                            <p class="form-group text-center">Already have an account? <a href="adminlogin.php" class="btn-link">Login</a> </p>
                         </form>
                            <!--/-->
                     </div> 
@@ -238,7 +238,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              </div>
         </div>
     </section>       
-
+<br>
 <?php
     
     include 'includes/scripts.php';

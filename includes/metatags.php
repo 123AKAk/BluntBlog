@@ -10,8 +10,8 @@
     <meta content="Blunt Technology" property="og:site_name">
     <meta content="website" property="og:type">
     <meta content="<?= $siteurl ?>" property="og:url">
-    <meta content="<?= $pagetitle ?>" property="og:title">
-    <meta content="<?= $pagedesc ?>" property="og:description">
+    <meta content="<?= $metatitle ?>" property="og:title">
+    <meta content="<?= $pagetitle." | ".$metatitle ?>" property="og:description">
     <meta content="<?= $pagelogo ?>" property="og:image">
     <meta content="200" property="og:image:width">
     <meta content="230" property="og:image:height">
@@ -26,8 +26,8 @@
     <meta name="twitter:site" content="@BluntTechnology">
     <meta name="twitter:creator" content="@BluntTechnology">
     
-    <meta name="twitter:title" content="<?= $pagetitle ?>">
-    <meta name="twitter:description" content="<?= $pagedesc ?>">
+    <meta name="twitter:title" content="<?= $metatitle ?>">
+    <meta name="twitter:description" content="<?= $pagetitle." | ".$metatitle ?>">
     <meta name="twitter:image" content="<?= $pagelogo ?>">
     <meta name="twitter:image:width" content="200">
     <meta name="twitter:image:height" content="200">

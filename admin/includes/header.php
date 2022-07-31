@@ -2,6 +2,7 @@
     session_start();
     $loggedin = false;
     require "../assets/db.php";
+    require "../assets/varnames.php";
     require '../assets/sharedComponents.php';
     $components = new SharedComponents();
 
@@ -9,24 +10,24 @@
         $_SESSION["admin_blunt_blog_user_loggedin_"] = $components->unprotect($_SESSION["admin_blunt_blog_user_loggedin_"]);
         if ($_SESSION["admin_blunt_blog_user_loggedin_"] == true && isset($_SESSION["blunt_blog_user_status_"])){
             $_SESSION["admin_blunt_blog_user_loggedin_"] = $components->protect($_SESSION["admin_blunt_blog_user_loggedin_"]);
-            $id = $components->unprotect($_SESSION["blunt_blog_user_status_"]);
-            $result = $components->checkuser($id, $pdo);
-            $username = $components->returnname($id, $pdo);
-            if($result != 1)
+            $adid = $components->unprotect($_SESSION["blunt_blog_user_status_"]);
+            $type = $components->checkuser($adid, $pdo);
+            $username = $components->returnname($adid, $pdo);
+            if($type >= 1)
             {
+                $loggedin = true;
+            }
+            else{
                 header("location: ../logout.php");
                 exit;
             }
-            else{
-                $loggedin = true;
-            }
         }
         else{
-            header("location: .././");
+            header("location: ../adminlogin.php");
         }
     }
     else{
-        header("location: .././");
+        header("location: ../adminlogin.php");
     }
 ?>
 
@@ -102,8 +103,14 @@
     </style>
 
     <!-- <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">    -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
-    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <script src="assets/js/jquery.min.js"></script>
+    <!--<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>-->
+    <link rel="stylesheet" href="assets/js/DataTables/datatables.min.css"></style>
+    <link rel="stylesheet" href="assets/js/DataTables/datatables.css"></style>
+    <script src="assets/js/DataTables/datatables.js"></script>
+    <script src="assets/js/DataTables/datatables.min.js"></script>
+    
+    <!--<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>-->
+    <!--<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
 </head>

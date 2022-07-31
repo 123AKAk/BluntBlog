@@ -1,23 +1,14 @@
-<?php require "assets/db.php"; ?>
 <?php
-
-    session_start();
-
-    $loggedin = false;
-
-    // Check if the user is already logged in, if yes then redirect him to welcome page
-    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) 
-    {
-        header("location: index.php");
-        exit;
-    }
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
     
+    include 'includes/header.php';
+    include 'includes/navbar.php';
 
-    // Define variables and initialize with empty values
-    $email = $password = "";
-    $email_err = $password_err = $_SESSION["email"] ="";
+    $email = $email_err = $email_succ = "";
 
-    // Processing form data when form is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
         // Check if email is empty
@@ -25,29 +16,37 @@
             $email_err = "Enter your Email.";
         } else {
             $email = trim($_POST["email"]);
-            $_SESSION["email"] = $email;
         }
 
-        // Validate credentials
         if (empty($email_err)) {
-            // Prepare a select statement
             $sql = "SELECT * FROM users WHERE email = :email";
-
             if ($stmt = $pdo->prepare($sql)) {
-                // Bind variables to the prepared statement as parameters
-                $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
-
-                // Set parameters
                 $param_email = trim($_POST["email"]);
-
-                // Attempt to execute the prepared statement
+                $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
                 if ($stmt->execute()) {
-                    // Check if email exists, if yes then verify password
                     if ($stmt->rowCount() == 1) {
                         if ($row = $stmt->fetch()) {
-                            $id = $row["id"];
-                            $username = $row["username"];
-                           
+
+                            $set = 'EYO1BLUNT2AKAK3';
+                            $code = substr(str_shuffle($set), 0, 12);
+
+                            $bsql = "UPDATE users SET code=:code WHERE id=:id";
+                            $stmt= $pdo->prepare($bsql);
+                            $stmt->execute(['code' => $code, 'id' => $row["id"],]);
+                            if ($stmt->rowCount()) 
+                            {
+                                $userid = $components->protect($row["id"]);
+
+                                require 'assets/sendmail.php';
+                                $model = new send_Mail();
+                                $mailresult = $model->forgotpasswrd($_POST["email"], $row["username"], $code, $userid, "user");
+                                json_encode($mailresult);
+                                if($mailresult["response"] == true)
+                                    $email_succ = $mailresult["message"];
+                                else
+                                    $email_err = $mailresult["message"];
+                            }
+                            
                             
                         }
                     } else {
@@ -57,89 +56,58 @@
                 } else {
                     echo "Oops! Something went wrong. Please try again later.";
                 }
-
-                // Close statement
                 unset($stmt);
             }
         }
-        // Close connection
         unset($pdo);
     }
 ?>
 
-<?php
-// Initialize the session
-// session_start();
-// $loggedin = false;
-
-// // Check if the user is already logged in, if yes then redirect him to welcome page
-// if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-//    $loggedin = true;
-    
-// }
-
-?>
-
-<!doctype html>
-<html lang="en">
-
-<head>
-    <!-- Meta -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <!-- favicon -->
-    <link rel="icon" sizes="16x16" href="assets/img/favicon.png">
-
-    <!-- Title -->
-    <title> Login </title>
-  
-    <!-- CSS Plugins -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/owl.carousel.css">
-    <link rel="stylesheet" href="assets/css/line-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
-
-    <!-- main style -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
-
-    <?php require "includes/metatags.php"; ?>    
-</head>
-
-<body>
-
-<?php require "includes/navbar.php"; ?>
-<!-- <br>
-<br>
-<br>
-<br> -->
-    <!--Login-->
-    <section class="container" style="margin-bottom:20px">
-    <br>
-        <div class="section-heading">
-            <div class="row">
-                <div class="col-lg-6 col-md-8 m-auto">
-                    <div class="login-content">
-                        <h4>Forgot Password</h4>
-                        <p></p>
-                        <form  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="sign-form widget-form " method="POST">
-                            <div class="form-group">
-                                <input type="email" class="form-control <?= (!empty($email_err)) ? 'is-invalid' : ''; ?>" placeholder="Enter Account Email" name="email" value="<?= (!empty($_SESSION["email"])) ? $_SESSION["email"] : ''; ?>">
-                                <span class="invalid-feedback"><?= $email_err; ?></span>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn-custom">Submit</button>
-                            </div>
-                            <p class="form-group text-center">Don't have an account? <a href="signup.php" class="btn-link">Create One</a> or <a href="signup.php" class="btn-link">Login    </a></p>
-                        </form>
-                    </div> 
+    <!--section-heading-->
+    <div class="section-heading " >
+        <div class="container-fluid">
+            <div class="section-heading-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-heading-2-title ">
+                            <h1>Forgot Password</h1>
+                            <p class="links"><a href="./">Home <i class="las la-angle-right"></i></a> Activate Account</p>
+                        </div>
+                    </div>  
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
+    <!-- display output-->
+    <section class="blog-author mt-30">
+        <div class="container-fluid">
+            <div class="">
+                <!--content-->
+                <div class="" style="justify-content: center; display: flex;">
+                    <div class="row theiaStickySidebar">
+                        <div class="card p-2">
+                            <h3><span class="text-success"><?= $email_succ; ?></span></h3>
+                            <form  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="sign-form widget-form " method="POST">
+                                <div class="form-group">
+                                    <input type="email" class="form-control <?= (!empty($email_err)) ? 'is-invalid' : ''; ?>" placeholder="Email*" name="email" value="">
+                                    <span class="invalid-feedback"><?= $email_err; ?></span>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn-custom btn-dark">Submit</button>
+                                </div>
+                                <p class="form-group text-center">Don't have an account? <a href="adminsignup.php" class="btn-link">Create One</a> </p>
+                            </form>
+                        </div>
+                    </div>
+
+                    <br>
+                </div>
+                <!--/-->
+                <br>
+            </div>
+        </div>
+    </section>
 <?php
     include 'includes/footer.php';
     include 'includes/scripts.php';

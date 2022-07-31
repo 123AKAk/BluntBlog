@@ -113,6 +113,9 @@
                         </ul>
                     </li>
 
+                    <?php if($type == 2)
+                    {
+                    ?>
                     <li>
                         <a href="users.php">
                             <span class="icon-menu feather-icon">
@@ -123,7 +126,6 @@
                             </span>
                         </a>
                     </li>
-
                     <li class="active-li">
                         <a href="newsletter.php">
                             <span class="icon-menu feather-icon">
@@ -134,7 +136,9 @@
                             </span>
                         </a>
                     </li>
-
+                    <?php
+                    }
+                    ?>
                 </ul>
             </div>
         </aside>

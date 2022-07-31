@@ -1,4 +1,9 @@
 <?php
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
+    
     if(!isset($_GET["catID"]))
     {
         header("location: 404.php?err=Error Getting Category");
@@ -26,16 +31,17 @@
     $category = $stmt->fetch();
 
     // Get Latest articles
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE id_categorie = ?  ORDER BY `article_created_time` DESC ");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE id_categorie = ? AND article_status=1 ORDER BY `article_created_time` DESC ");
     $stmt->execute([$catID]);
     $articles = $stmt->fetchAll();
     } else {
 
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id ORDER BY `article_created_time` DESC ");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE article_status=1 ORDER BY `article_created_time` DESC ");
     $stmt->execute();
     $articles = $stmt->fetchAll();
     }
 
+    $returntitle = $category['category_name'];
 
 ?> 
 
@@ -46,7 +52,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-heading-2-title ">
-                            <h1> <?= $catID != "" ? "Category cannot be found" : $category['category_name'] ?>  </h1>
+                            <h1> <?= $catID == "" ? "Category cannot be found" : $category['category_name'] ?>  </h1>
                             <p class="links"><a href="index.php">Home <i class="las la-angle-right"></i></a> Category(s)</p>
                         </div>
                     </div>  
@@ -76,7 +82,7 @@
                                     <div class="post-list-content">
                                         <ul class="entry-meta"> 
                                             <li class="entry-cat">
-                                                <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
+                                                <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1" style="color:<?= $article['category_color'] ?>">
                                                     <?= $article['category_name'] ?>
                                                 </a>
                                             </li>

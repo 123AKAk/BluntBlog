@@ -1,15 +1,24 @@
 <?php
-    if(!isset($_POST["searchkeyword"]))
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
+
+    if(!isset($_GET["keywrd"]))
     {
         header("location: ./");
     }
 
-    $keywrd = $_POST["searchkeyword"];
+    $keywrd = $_GET["keywrd"];
+    if($keywrd == "")
+    {
+        echo "<script>window.history.back()</script>";
+    }
 
     include 'includes/header.php';
     include 'includes/navbar.php';
     
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE article_title LIKE :keyword OR category_name LIKE :keyword OR author_fullname LIKE :keyword");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE article_status=1 AND article_title LIKE :keyword OR category_name LIKE :keyword OR author_fullname LIKE :keyword");
     $stmt->bindValue(':keyword', '%' . $keywrd . '%', PDO::PARAM_STR);
     $stmt->execute();
     $searchdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -28,7 +37,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-heading-2-title text-left">
-                            <h2>Search result(s) for : <?= $keywrd ?></h2>
+                            <h3>Search result(s) for : <?= $keywrd ?></h3>
                             <p class="desc"><?= $number_of_rows ?> Posts were found for keyword <strong><?= $keywrd ?></strong></p>
                         </div>
                     </div>  
@@ -65,7 +74,7 @@
                                 </div>
                                 <div class="post-list-category">
                                     <div class="entry-cat">
-                                        <a href="category.php?data=<?=substr($data['category_name'],0,30)."..."?>&catID=<?= $components->protect($data['category_id']) ?>" class="category-style-1">
+                                        <a href="category.php?data=<?=substr($data['category_name'],0,30)."..."?>&catID=<?= $components->protect($data['category_id']) ?>" class="category-style-1" style="color:<?= $data['category_color'] ?>">
                                             <?= $data['category_name'] ?>
                                         </a>
                                     </div>

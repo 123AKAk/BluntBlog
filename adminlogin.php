@@ -1,9 +1,8 @@
 <?php 
-require "assets/db.php";
-require 'assets/sharedComponents.php';
-$components = new SharedComponents();
-?>
-<?php
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
 
     session_start();
 
@@ -18,9 +17,7 @@ $components = new SharedComponents();
     
     $signupmsg = "";
     if(isset($_GET["admsg"]))
-    {
-        $signupmsg = "Sign Up Successful - Login in with your account details";
-    }
+        $signupmsg = "Sign Up Successful - Verify your Email and Login in with your account details";
 
     // Define variables and initialize with empty values
     $email = $password = "";
@@ -47,7 +44,7 @@ $components = new SharedComponents();
         // Validate credentials
         if (empty($email_err) && empty($password_err)) {
             // Prepare a select statement
-            $sql = "SELECT * FROM users WHERE email = :email";
+            $sql = "SELECT * FROM author WHERE author_email = :author_email";
 
             if ($stmt = $pdo->prepare($sql)) {
 
@@ -55,7 +52,7 @@ $components = new SharedComponents();
                 $param_email = trim($_POST["email"]);
 
                 // Bind variables to the prepared statement as parameters
-                $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+                $stmt->bindParam(":author_email", $param_email, PDO::PARAM_STR);
 
 
                 // Attempt to execute the prepared statement
@@ -64,16 +61,17 @@ $components = new SharedComponents();
                     if ($stmt->rowCount() == 1) {
                         if ($row = $stmt->fetch()) {
 
-                            $id = $row["id"];
-                            $username = $row["username"];
+                            $id = $row["author_id"];
+                            $username = $row["author_fullname"];
                             $hashed_password = $row["password"];
                             $userstatus = $row["userstatus"];
                             $type = $row["type"];
 
-                            if (password_verify($password, $hashed_password)) {
-                                if($type == 1)
+                            if (password_verify($password, $hashed_password)) 
+                            {
+                                if ($userstatus == 1) 
                                 {
-                                    if ($userstatus == 1) {
+                                    if($type >= 1){
                                         session_start();
                                         // Store data in session variables
                                         $_SESSION["admin_blunt_blog_user_loggedin_"] = $components->protect("true");
@@ -84,11 +82,11 @@ $components = new SharedComponents();
                                         exit;
                                     }
                                     else {
-                                        $email_err = "Account has not been Verified";
+                                        $email_err = "Account has not been Approved by Administrator";
                                     }
                                 }
                                 else {
-                                    $email_err = "Account is not an Administrator";
+                                    $email_err = "Account has not been Verified, check your email and Verify your Account";
                                 }
                             }
                             else {
@@ -98,10 +96,10 @@ $components = new SharedComponents();
                         }
                     } else {
                         // Display an error message if username doesn't exist
-                        $email_err = "No account found with that Email.";
+                        $email_err = "No Admin Account found with that Email.";
                     }
                 } else {
-                    echo "Oops! Something went wrong. Please try again later.";
+                    $email_err = "Oops! Something went wrong. Please try again later.";
                 }
 
                 // Close statement
@@ -151,7 +149,7 @@ $components = new SharedComponents();
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/custom.css">
 
-    <?php require "includes/metatags.php"; ?>    
+    <?php require "includes/metatags.php"; ?>
 </head>
 
 <body>
@@ -182,9 +180,9 @@ $components = new SharedComponents();
                                 <a href="forgotpassword.php" class="btn-link ">Forgot Password?</a>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn-custom">Login in</button>
+                                <button type="submit" class="btn-custom">Login</button>
                             </div>
-                            <p class="form-group text-center">Don't have an account? <a href="signup.php" class="btn-link">Create One</a> </p>
+                            <p class="form-group text-center">Don't have an account? <a href="adminsignup.php" class="btn-link">Create One</a> </p>
                         </form>
                     </div> 
                 </div>

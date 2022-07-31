@@ -1,26 +1,39 @@
 <?php
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
+    
     if(!isset($_GET["authid"]))
     {
+        happy:
         header("location: 404.php?err=Error Getting Author");
         exit;
     }
 
     include 'includes/header.php';
-    include 'includes/navbar.php';
-
-    $author_id = $_GET["authid"];
-
+    
+    $author_id =  $components->unprotect($_GET["authid"]);
+    
     // Get author Data to display
-    $stmt = $conn->prepare("SELECT * FROM author WHERE author_id = ?");
+    $stmt = $conn->prepare("SELECT * FROM author WHERE author_id = ? AND `type` != 0");
     $stmt->execute([$author_id]);
     $author = $stmt->fetch();
-
-    //get author related post
-    $authid = $author['author_id'];
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE id_author='$authid' ORDER BY `article_created_time` DESC");
-    $stmt->execute();
-    $articles = $stmt->fetchAll();
-
+    
+    if(!empty($author))
+    {
+        //get author related post
+        $authid = $author['author_id'];
+        $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE id_author='$authid' ORDER BY `article_created_time` DESC");
+        $stmt->execute();
+        $articles = $stmt->fetchAll();
+    }
+    else
+    {
+        goto happy;
+    }
+    
+    include 'includes/navbar.php';
 ?> 
 
     <!--author-->
@@ -89,7 +102,7 @@
                             <div class="post-list-content">
                                 <ul class="entry-meta"> 
                                     <li class="entry-cat">
-                                        <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
+                                        <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1" style="color:<?= $article['category_color'] ?>">
                                             <?= $article['category_name'] ?>
                                         </a>
                                     </li>

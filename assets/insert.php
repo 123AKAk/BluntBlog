@@ -1,4 +1,8 @@
-<?php require "db.php"; ?>
+<?php 
+    require "db.php"; 
+    require 'sharedComponents.php';
+    $components = new SharedComponents();
+?>
 <?php
 session_start();
 // Get type from header
@@ -29,7 +33,7 @@ if ($conn) {
     
                     // Call insert function
                     $resultmsg = insertToDB($conn, $type, $data);
-                    if($resultmsg == 11)
+                    if($resultmsg != 0)
                     {
                         $_SESSION["adminsuc"] = "Post Created Successfully";
                         header("Location: ../admin/add_post.php", true, 301);
@@ -104,18 +108,33 @@ if ($conn) {
                         "author_twitter" =>  test_input($_POST["authTwitter"]),
                         "auth_instagram" => test_input($_POST["authInstagram"]),
                         "auth_facebook" => test_input($_POST["authFacebook"]),
-                        "author_avatar" => test_input($_FILES["authImage"]["name"])
+                        "author_avatar" => test_input($_FILES["authImage"]["name"]),
+                        "type" => test_input(1)
                     );
 
                     $tableName = 'author';
 
                     // Call insert function
                     $resultmsg = insertToDB($conn, $tableName, $data);
-                    if($resultmsg == 11)
+                    if($resultmsg != 0)
                     {
-                        $_SESSION["adminsuc"] = "Author Created Successfully";
-                        header("Location: ../admin/add_author.php", true, 301);
-                        exit;
+                        $set = 'EYO1BLUNT2AKAK3';
+                        $code = substr(str_shuffle($set), 0, 12);
+
+                        require 'sendmail.php';
+                        $model = new send_Mail();
+                        $mailresult = $model->sendMail($_POST["authEmail"], $password, $_POST["authName"], $code, $components->protect($resultmsg));
+                        json_encode($mailresult);
+                        if($mailresult["response"] == true)
+                        {
+                            $_SESSION["adminsuc"] = "Author Created Successfully";
+                            header("Location: adminlogin.php?admsg=active", true, 301);
+                            exit;
+                        }
+                        else
+                            $_SESSION["adminerra"] = $mailresult["message"];
+                            header("Location: ../admin/add_author.php", true, 301);
+                            exit;
                     }
                     else
                     {
@@ -132,15 +151,18 @@ if ($conn) {
 
             case "comment":
 
-                $id = test_input($_POST["id_article"]);
+                $lastid = $_POST["id_article"];
+                $aid = $components->unprotect($lastid);
+                //$id = test_input($aid);
+
+                //rand()
 
                 // PREPARE DATA TO INSERT INTO DB
                 $data = array(
                     "comment_username" => test_input($_POST["username"]),
-                    // "comment_avatar" => test_input($_POST["comment_avatar"]),
                     "comment_content" => test_input($_POST["comment"]),
                     "comment_date" => date('Y-m-d H:i:s'),
-                    "id_article" =>  test_input($_POST["id_article"])
+                    "id_article" =>  test_input($aid)
                 );
 
                 $tableName = 'comment';
@@ -149,7 +171,7 @@ if ($conn) {
                 insertToDB($conn, $tableName, $data);
 
                 // Go to show.php
-                header("Location: ../post-single.php?id=$id", true, 301);
+                header("Location: ../post-single.php?id=$lastid#commentsec", true, 301);
                 exit;
                 break;
 
@@ -173,14 +195,14 @@ function insertToDB($conn, $table, $data)
 
     try {
         // prepare sql and bind parameters
-        $sql = "INSERT INTO $table ($columns) VALUES ($values)";
+        $sql = "INSERT INTO $table ($columns) VALUES ($values); SELECT LAST_INSERT_ID();";
         $stmt = $conn->prepare($sql);
 
         // insert row
         $stmt->execute($data);
-
+        
         //echo "New records created successfully";
-        return 11;
+        return $conn->lastInsertId();
     } catch (PDOException $error) {
         //echo $error;
         return $error;

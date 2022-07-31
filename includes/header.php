@@ -1,20 +1,17 @@
-<?php 
-    require "assets/db.php";
-    require "assets/varnames.php";
-    require 'assets/sharedComponents.php';
-    $components = new SharedComponents();
-?>
 
 <?php
 // Initialize the session
 session_start();
 $loggedin = false;
+$realuserid = 0;
 
 if (isset($_SESSION["blunt_blog_user_loggedin_"])){
     $_SESSION["blunt_blog_user_loggedin_"] = $components->unprotect($_SESSION["blunt_blog_user_loggedin_"]);
     if ($_SESSION["blunt_blog_user_loggedin_"] == true && isset($_SESSION["blunt_blog_user_status_"])){
         $_SESSION["blunt_blog_user_loggedin_"] = $components->protect($_SESSION["blunt_blog_user_loggedin_"]);
+        
         $loggedin = true;
+        $realuserid = $_SESSION["blunt_blog_user_status_"];
     }
 }
 
@@ -45,7 +42,7 @@ if (isset($_SESSION["blunt_blog_user_loggedin_"])){
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/custom.css">
 
-    <?php include "assets/db.php"; ?>
+    <?php includeWithVariables('metatags.php', array('metatitle' => empty($returntitle) ? $globalname :  $returntitle )); ?>
 
     <script>
         function sharefunc()

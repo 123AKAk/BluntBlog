@@ -107,7 +107,9 @@
                                                         </span>
                                                     </div>
                                                 </div>
-
+                                                <?php if($type == 2)
+                                                {
+                                                ?>
                                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                                     <div class="form-group s-opt">
                                                         <label for="arAuthor" class="col-form-label">Author</label>
@@ -125,12 +127,31 @@
                                                         </span>
                                                     </div>
                                                 </div>
-
+                                                <?php
+                                                }
+                                                else
+                                                {
+                                                ?>
+                                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                    <div class="form-group s-opt">
+                                                        <label for="arAuthor" class="col-form-label">Author</label>                                                        
+                                                        <?php foreach ($authors as $author) : ?>
+                                                            <?php if ($article['id_author'] == $author['author_id']) : ?>
+                                                                <input class="form-control" value="<?= $author['author_id'] ?>" type="text" name="arAuthor" id="arAuthor" readonly hidden />
+                                                                <input value="<?= $author['author_fullname'] ?>" class="form-control" readonly/>
+                                                            <?php else : ?>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                }
+                                                ?>
 
                                             </div>
 
                                             <div class="form-group mb-0">
-                                                <button class="btn btn-secondary" type="button">Back</button>
+                                                <button class="btn btn-secondary" type="button" onclick="goback()">Back</button>
                                                 <input class="btn btn-primary" type="submit" name="update" value="Update">
                                             </div>
                                         </div>

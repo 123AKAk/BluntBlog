@@ -73,7 +73,7 @@
                                                     <div class="form-group">
                                                         <label for="authImage">Author Avatar</label>
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name="authImage" id="authImage" required>
+                                                            <input type="file" class="custom-file-input" name="authImage" id="authImage">
                                                             <label for="authImage"> <?= $author['author_avatar'] ?> </label>
                                                         </div>
                                                     </div>

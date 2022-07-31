@@ -20,6 +20,10 @@
         div.style.opacity = "0";
       }
       
+      function goback()
+      {
+          window.history.back();
+      }
       //shows the feedback alert
     //   function showalert(errortext){
     //     document.getElementById("txt").innerHTML = errortext;

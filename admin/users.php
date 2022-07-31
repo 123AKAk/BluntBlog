@@ -56,7 +56,7 @@
                                                     <th>Username</th>
                                                     <th>Email</th>
                                                     <th>Time Created</th>
-                                                    <th>User Type</th>
+                                                    <!-- <th>User Type</th> -->
                                                     <th>Actions</th>
                                                 </tr>  
                                                 </thead>  
@@ -86,9 +86,9 @@
                                                     <td>
                                                         <?= date_format($date, "D, M Y H:i:s") ?>
                                                     </td>
-                                                    <td>
-                                                        <?= $row['type'] == 1 ? "<p style='font-weight: bold; color:dodgerblue;'>Admin</p>" : "<p>User</p>"; ?>
-                                                    </td>
+                                                    <!-- <td>
+                                                        <?php //echo $row['type'] == 1 ? "<p style='font-weight: bold; color:dodgerblue;'>Admin</p>" : "<p>User</p>"; ?>
+                                                    </td> -->
                                                     <td class="relative">
                                                         <a class="action-btn " href="javascript:void(0); ">
                                                             <svg class="default-size "  viewBox="0 0 341.333 341.333 ">
@@ -106,13 +106,18 @@
                                                         <div class="action-option ">
                                                             <ul>
                                                                 <li>
-                                                                    <a href="../assets/delete.php?type=article&id=<?= $row['article_id'] ?> ">
+                                                                    <a href="../assets/delete.php?type=user&id=<?= $row['id'] ?> ">
                                                                         <i class="far fa-trash-alt mr-2" aria-hidden="true"></i> Delete
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="../assets/unpublish.php?type=user&id=<?= $row['id'] ?> ">
+                                                                    <a href="../assets/update.php?type=banuser&id=<?= $row['id'] ?> ">
                                                                         <i class="far fa-check-square mr-1" aria-hidden="true"></i> Ban
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="mailing.php?type=user&id=<?= $row['id'] ?> ">
+                                                                    <i class="far fa-envelope mr-1" aria-hidden="true"></i> Email
                                                                     </a>
                                                                 </li>
                                                             </ul>

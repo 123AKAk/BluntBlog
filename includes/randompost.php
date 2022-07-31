@@ -10,10 +10,11 @@
         {
             $rancatid = $category['category_id'];        
             $rancatname = $category['category_name'];
+            $rancatcolor = $category['category_color'];
         }
 
         // Get special category articles 
-        $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE id_categorie = '$rancatid' LIMIT 3");
+        $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE id_categorie = '$rancatid' AND article_status=1 LIMIT 3");
         $stmt->execute();
         $specialarticle1 = $stmt->fetchAll();
     ?>
@@ -24,7 +25,7 @@
             <div class="row">
                 <div class="col-lg-12 ">
                     <div class="section-title">
-                        <h3><?= $rancatname ?></h3>
+                        <h3 style="color:<?= $rancatcolor ?>"><?= $rancatname ?></h3>
                         <p>Discover the most outstanding news in any topic.</p>
                     </div>
                 </div>
@@ -45,13 +46,13 @@
                                 </a>
                             </div>
                             <h5 class="entry-title">
-                                <a href="post-single.phpdata=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
+                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                     <?= strlen($article['article_title']) > 50 ? substr($article['article_title'],0,50)."..." : $article['article_title']; ?>
                                 </a>
                             </h5>
                             <ul class="entry-meta">
                                 <li class="post-author">
-                                    <a href="author.php?authid=<?= $article['author_id'] ?>">
+                                    <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>">
                                         <?= $article['author_fullname'] ?>
                                     </a>
                                 </li>

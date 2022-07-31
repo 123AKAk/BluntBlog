@@ -1,12 +1,17 @@
 
 <?php
+
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
+
     if(!isset($_GET['id']))
     {
-        header("location: 404.php?err=Error Getting Post");
+        header("location: 404.php?err=Error Getting Post Details");
         exit;
     }
     
-    include 'includes/header.php';
     
     $article_id = $components->unprotect($_GET['id']);
     
@@ -17,9 +22,34 @@
     
     if(empty($article))
     {
-        header("location: 404.php?err=Post has been Deleted, cannot be found");
+        header("location: 404.php?err=Post does not Exists, cannot be found");
         exit;
     }
+    
+    $returntitle = $article["article_title"];
+
+    //run views on page load
+    $currentview = 1;
+    $stmt = $conn->prepare("SELECT * FROM postviews WHERE postid = $article_id");
+    $stmt->execute();
+    $postviews = $stmt->fetch();
+    if(!empty($postviews["viewcount"]))
+    {
+        $sql = "UPDATE `postviews` SET `viewcount`= ? WHERE `postid` = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$postviews["viewcount"]+1, $article_id]);
+
+        $currentview = $postviews["viewcount"]+1;
+    }
+    else
+    {   
+        $sql = 'INSERT INTO postviews(postid,viewcount) VALUES(:postid, :viewcount)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':postid' => $article_id, ':viewcount' => $currentview]);
+        
+        $currentview = $postviews["viewcount"]+1;
+    }
+    //end no. views
     
     // Get Category of article
     $stmt = $conn->prepare("SELECT * FROM `category` WHERE `category_id` = ?");
@@ -37,30 +67,31 @@
     $previous_article = $stmt->fetchAll();
     
     // Get next article Info
-    $stmt = $conn->prepare("SELECT * FROM `article` WHERE `article_id` > '$article_id' AND `id_categorie` = ? ORDER BY `article_id` DESC LIMIT 1");
+    $stmt = $conn->prepare("SELECT * FROM `article` WHERE `article_id` > '$article_id' AND `id_categorie` = ? AND article_status=1 ORDER BY `article_id` DESC LIMIT 1");
     $stmt->execute([$article["id_categorie"]]);
     $next_article = $stmt->fetchAll();
     
     // Get Comments with total comments
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN `comment` WHERE `article`.`article_id`= `comment`.`id_article` AND `article`.`article_id` = ? ORDER BY comment_id DESC");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN `comment` WHERE `article`.`article_id`= `comment`.`id_article` AND `article`.`article_id` = ? AND article_status=1 ORDER BY comment_id DESC");
     $stmt->execute([$article_id]);
     $comments = $stmt->fetchAll();
     $number_of_rows = $stmt->rowCount();
     
+    include 'includes/header.php';
     include 'includes/navbar.php';
     ?> 
 
 <!--section-heading-->
 <div class="section-heading " >
-        <div class="container-fluid">
-            <div class="section-heading-2">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="section-heading-2-title ">
+    <div class="container-fluid">
+        <div class="section-heading-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-heading-2-title ">
                             <p class="links">
                                 <a href="index.php">
                                     Home <i class="las la-angle-right"></i>
-                                </a> Post
+                                </a> <?= $article["article_title"] ?>
                             </p>
                         </div>
                     </div>  
@@ -73,59 +104,100 @@
     <!--post-single-->
     <section class="">
     
-        <div class="post-single-image">
-            <img src="img/article/<?= $article["article_image"] ?>" alt="" style="width: 100%;">
-        </div>
-
+        
         <div class="container-fluid">
             <div class="row">
                 <!--content-->
                 <div class="col-lg-8 oredoo-content">
                     <div class="theiaStickySidebar">
-                             <!--post-single-title-->
+                            <div class="post-single-image mt-10">
+                                <img src="img/article/<?= $article["article_image"] ?>" alt="" style="width: 100%;">
+                            </div>
+                            <!--post-single-title-->
                              <div class="post-single-title">  
                                 <h3>
                                     <?= $article["article_title"] ?>
                                 </h3>
                                 <ul class="entry-meta">
-                                    <li class="post-author-img">
+                                    <li class="post-author-img" title="Post Author Image">
                                         <img src="img/avatar/<?= $article['author_avatar'] ?>" alt="">
                                     </li>
-                                    <li class="post-author">
-                                        <a href="author.php?authid=<?= $article['author_id'] ?>">
+                                    <li class="post-author" title="Post Author Name">
+                                        <a href="author.php?authid=<?= $components->protect($article['author_id']) ?>">
                                             <?= $article['author_fullname'] ?>
                                         </a>
                                     </li>
                                     <li class="entry-cat">
                                         <span class="line"></span>
-                                        <a class="post-category" href="category.php?data=<?=substr($category['category_name'],0,30)."..."?>&catID=<?= $components->protect($category['category_id']) ?>">
+                                        <a class="post-category" href="category.php?data=<?=substr($category['category_name'],0,100)."..."?>&catID=<?= $components->protect($category['category_id']) ?>" style="color:<?= $category['category_color'] ?>">
                                         <?= $category['category_name'] ?>
                                     </a>
                                     </li>
-                                    <li class="post-date"> <span class="line"></span>
-                                        <?= date_format(date_create($article["article_created_time"]), "F d, Y ") ?>
+                                </ul>
+                                
+                                <ul class="entry-meta">
+                                    <li class="pos-date">
+                                        <a title="Post Date">
+                                            <?= date_format(date_create($article["article_created_time"]), "F d, Y ") ?>
+                                        </a>
                                     </li>
                                     <li>
                                         <span class="line"></span>
                                         <a title="Views">
-                                            <i class="fab fa-eye" style="background-color: gray;"></i> 0 Views
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <span class="line"></span>
-                                        <a title="Save Post" onclick="savepost()" href="javascript:void(0);">
-                                            <i class="fab fa-save" style="background-color: gray;"></i> Save Post
+                                            <i class="fab fa-eye"></i> <?= $currentview?> Views
                                         </a>
                                     </li>
                                 </ul>
                                 
-                            </div>
+                                <ul class="entry-meta">
+                                    <li>
+                                        <input value="<?= $components->protect($article_id) ?>" id="realpostid" readonly hidden/>
+                                        <input value="<?= $realuserid ?>" id="realuserid" readonly hidden/>
+                                        <?php if($loggedin == true)
+                                        {
+                                            $sql = "SELECT * FROM saved WHERE user_id = :user_id AND post_id = :post_id";
+                                            $stmt = $pdo->prepare($sql);
+                                            $stmt->execute(['user_id' => $components->unprotect($realuserid), 'post_id' => $article_id]);
+                                            if ($stmt->rowCount() == 1) 
+                                            {
+                                        ?>
+                                        <a title="Remove from Saved" href="javascript:void(0);" onclick="unsavepost('#realpostid', '#realuserid');" id="savepost">
+                                            <i class="fas fa-save"></i> Saved 
+                                        </a>
+                                        <?php
+                                            }
+                                            else
+                                            {
+                                        ?>
+                                        <a title="Add to Saved" href="javascript:void(0);" onclick="savepost('#realpostid', '#realuserid');" id="savepost">
+                                            <i class="fas fa-save"></i><b> Save</b> 
+                                        </a>
+                                        <?php        
+                                            }
+                                        }
+                                        else
+                                        {
+                                        ?>
+                                        <a title="Add to Saved (Not Logged in)" href="login.php?savepost=<?= $components->protect($article_id) ?>">
+                                            <i class="fas fa-save" ></i><b> Save</b> 
+                                        </a>
+                                        <?php
+                                        }
+                                        ?>
+                                    </li>
+                                    <li>
+                                        <span class="line"></span>
+                                        <a onclick="printDiv('<?= $globalname?>', '<?= $siteemail?>', '<?= $siteurl?>')" href="javascript:void(0);">
+                                            <i class="fas fa-print" ></i> Print
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <span class="line"></span>
+                                        <a><span id="readtime"></span> Minutes read</a>
+                                    </li>
+                                </ul>
 
-                            <!--post-single-content-->
-                            <div class="post-single-content">
-                                <?= $article["article_content"] ?>
                             </div>
-                            
                             <!--post-single-bottom-->
                             <div class="post-single-bottom">
                                 <div class="menu-outer">
@@ -177,58 +249,24 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <!-- <div class="social-media">
-                                    <p>Share on :</p>
-                                    <ul class="">
-                                        <li>
-                                            <a id="singleshare1" data-sharer="facebook" data-hashtag="hashtag" >
-                                                <i class="fab fa-facebook"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="singleshare2" data-sharer="twitter" data-title="Check out!" data-hashtags="awesome, blunt" >
-                                                <i class="fab fa-twitter"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="singleshare3" data-sharer="pinterest" >
-                                                <i class="fab fa-pinterest"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="singleshare4" data-sharer="whatsapp" data-title="Checkout Sharer.js!" >
-                                                <i class="fab fa-whatsapp"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="singleshare5" data-sharer="linkedin" >
-                                                <i class="fab fa-linkedin"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="singleshare6" data-sharer="email" data-title="Awesome Url" data-subject="Hey! Check out that URL" data-to="some@email.com">
-                                                <i class="fab fa-email"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="singleshare7" data-sharer="telegram" data-title="Checkout Sharer.js!" >
-                                                <i class="fab fa-telegram"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div> -->
                             </div>
+                            <br>
+                            <!--post-single-content-->
+                            <div class="post-single-content" id="postarticle">
+                                <?= $article["article_content"] ?>
+                            </div>
+                            
 
                             <!--post-single-author-->
                             <div class="post-single-author ">
                                 <div class="authors-info">
                                     <div class="image">
-                                        <a href="author.php?authid=<?= $article['author_id'] ?>" class="image">
+                                        <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>" class="image" title="Post Author Image">
                                             <img src="img/avatar/<?= $article['author_avatar'] ?>" alt="">
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h4><?= $article['author_fullname'] ?></h4>
+                                        <h4 title="Post Author Name"><?= $article['author_fullname'] ?></h4>
                                         <p><?= $article['author_desc'] ?></p>
                                     </div>
                                 </div>
@@ -254,13 +292,13 @@
                                             </div>
                                             <div class="small-post-content">
                                             <small>
-                                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
+                                                <a title="Go to Previous Related Post" href="post-single.php?data=<?=substr($aart['article_title'],0,100)."..."?>&id=<?= $components->protect($aart['article_id']) ?>">
                                                     <i class="las la-arrow-left"></i>
                                                     Previous related post category
                                                 </a>
                                             </small>
                                             <p>
-                                                <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
+                                                <a href="post-single.php?data=<?=substr($aart['article_title'],0,100)."..."?>&id=<?= $components->protect($aart['article_id']) ?>">
                                                     <?= strlen($aart['article_title']) > 47 ? substr($aart['article_title'],0,47)."..." : $aart['article_title']; ?>
                                                 </a>
                                             </p>
@@ -289,13 +327,13 @@
                                             </div>
                                             <div class="small-post-content">
                                                 <small>
-                                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
+                                                    <a title="Go to Next Related Post" href="post-single.php?data=<?=substr($bart['article_title'],0,100)."..."?>&id=<?= $components->protect($bart['article_id']) ?>">
                                                         Next related post category
                                                         <i class="las la-arrow-right"></i>
                                                     </a>
                                                 </small>
                                                 <p>
-                                                    <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
+                                                    <a href="post-single.php?data=<?=substr($bart['article_title'],0,100)."..."?>&id=<?= $components->protect($bart['article_id']) ?>">
                                                         <?= strlen($bart['article_title']) > 47 ? substr($bart['article_title'],0,47)."..." : $bart['article_title']; ?>
                                                     </a>
                                                 </p>
@@ -320,7 +358,7 @@
                             </div>
                             
                             <!--post-single-comments-->
-                            <div class="post-single-comments">
+                            <div class="post-single-comments" id="eyocommentsec">
                                 <!--Comments-->
                                 <h4><?= $number_of_rows ?> Comments</h4>
                                 <ul class="comments">
@@ -333,12 +371,12 @@
                                                 <ul class="list-inline">
                                                     <li>
                                                         <a>
-                                                            <?= "User-" . $comment['comment_username'] ?>
+                                                            <?= "User - " . $comment['comment_username'] ?>
                                                         </a>
                                                     </li>
                                                     <li class="slash"></li>
                                                     <li>
-                                                        <?= date_format(date_create($comment['comment_date']), "d F Y, h:i") ?>
+                                                        <?= date_format(date_create($comment['comment_date']), "d F Y") ?>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -356,22 +394,16 @@
                                 <div class="comments-form">
                                     <h4 >Leave a Comment</h4>
                                     <!--form-->
-                                    <form class="form " action="assets/insert.php?type=comment&id=<?= $components->protect($article_id) ?>#comment" method="POST" id="main_contact_form">
+                                    <form class="form " action="assets/insert.php?type=comment&id=<?= $components->protect($article_id) ?>#commentsec" method="POST" id="main_contact_form">
                                         <p>Your email adress will not be published ,Requied fileds are marked*.</p>
                                         <div class="alert alert-success contact_msg" style="display: none" role="alert">
                                             Your message was sent successfully.
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <input type="text" name="name" id="name" class="form-control" placeholder="Name*" required="required">
-                                                    <input type="hidden" name="username" value="<?= rand() ?>">
+                                                    <input type="text" name="username" id="name" class="form-control" placeholder="Name*" required="required">
                                                     <input type="hidden" name="id_article" value="<?= $components->protect($article_id) ?>">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <input type="email" name="email" id="email" class="form-control" placeholder="Email*" required="required">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -382,8 +414,8 @@
                                         
                                             <div class="col-lg-12">
                                                 <div class="mb-20">
-                                                    <input name="name" type="checkbox" value="1" required="required">
-                                                    <label for="name"><span>save my name , email and website in this browser for the next time I comment.</span></label>
+                                                    <input name="name" type="checkbox" value="1">
+                                                    <label for="name"><span>Save my name on this website in this browser for the next time I comment.</span></label>
                                                 </div>
                                             
                                                 <button type="submit" name="submit" class="btn-custom">
@@ -419,6 +451,31 @@
 <?php
     include 'includes/footer.php';
 ?>
+
+<script>
+    function readingTime()
+    {
+        const text = document.getElementById("postarticle").innerText;
+        const wpm = 225;
+        const words = text.trim().split(/\s+/).length;
+        const time = Math.ceil(words / wpm);
+        document.getElementById("readtime").innerText = time;
+    }
+    readingTime();
+
+    function printDiv(blogname, blogemail, blogurl)
+    {
+        var divContents = document.getElementById("postarticle").innerHTML;
+        var a = window.open('', '', 'height=500, width=500');
+        a.document.write('<html>');
+        a.document.write('<body> <p>Printed from '+blogname+' @ <a href="'+blogurl+'">'+blogurl+'</a> | Contact us @ '+blogemail+'<p> <hr>');
+        a.document.write(divContents);
+        a.document.write('</body></html>');
+        a.document.close();
+        a.print();
+    }
+</script>
+
 <?php
     include 'includes/scripts.php';
 ?> 

@@ -1,9 +1,8 @@
 <?php 
-require "assets/db.php";
-require 'assets/sharedComponents.php';
-$components = new SharedComponents();
-?>
-<?php
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
 
     session_start();
 
@@ -15,6 +14,13 @@ $components = new SharedComponents();
         exit;
     }
     
+    $signupmsg = "";
+    if(isset($_GET["admsg"]))
+        $signupmsg = "Sign Up Successful - Verify your Email and Login in with your account details";
+    if(isset($_GET["newadmsg"]))
+        $signupmsg = "Account Password Reset Successful - Login in with new account details";
+    if(isset($_GET["savepost"]))
+        $signupmsg = "Login to Save Post";
 
     // Define variables and initialize with empty values
     $email = $password = "";
@@ -62,19 +68,31 @@ $components = new SharedComponents();
                             $hashed_password = $row["password"];
                             if(password_verify($password, $hashed_password)) {
                                 if($type == 1){
-                                    $email_err = "Account is not a User";
+                                    $email_err = "Account has been Banned, Contact the Adminstrator for more details";
+                                    return;
                                 }
                                 else if($userstatus == 0){
                                     $email_err = "Account has not been Verified";
+                                    return;
                                 }
                                 else{
                                     // Store data in session variables
                                     $_SESSION["blunt_blog_user_loggedin_"] = $components->protect("true");
                                     $_SESSION["blunt_blog_user_status_"] = $components->protect($id);
 
-                                    // Redirect user to welcome page
-                                    header("location: index.php");
-                                    exit;
+                                    if(isset($_POST["savepost"]))
+                                    {
+                                        $getpostid = $_POST["savepost"];
+                                        header("location: post-single.php?id=$getpostid");
+                                        exit;
+                                    }
+                                    else
+                                    {
+                                        // Redirect user to welcome page
+                                        echo "Okay na, I go fight you today. BY FORCE";
+                                        // header("location: index.php");
+                                        // exit;
+                                    }
                                 }
                             }
                             else {
@@ -155,7 +173,7 @@ $components = new SharedComponents();
                 <div class="col-lg-6 col-md-8 m-auto">
                     <div class="login-content">
                         <h4>Login</h4>
-                        <p></p>
+                        <p style="text-align: center; font-weight:bold; margin-bottom:20px;"><?= $signupmsg ?></p>
                         <form  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="sign-form widget-form " method="POST">
                             <div class="form-group">
                                 <input type="email" class="form-control <?= (!empty($email_err)) ? 'is-invalid' : ''; ?>" placeholder="Email*" name="email" value="<?= (!empty($_SESSION["email"])) ? $_SESSION["email"] : ''; ?>">
@@ -165,6 +183,14 @@ $components = new SharedComponents();
                                 <input type="password" name="password" class="form-control <?= (!empty($password_err)) ? 'is-invalid' : ''; ?>"  placeholder="Password*">
                                 <span class="invalid-feedback"><?= $password_err; ?></span>
                             </div>
+                            <?php
+                                if(isset($_GET["savepost"]))
+                                {
+                            ?>
+                            <input type="text" name="savepost" value="<?=$_GET["savepost"]?>" hidden/>
+                            <?php
+                                }
+                            ?>
                             <div class="sign-controls form-group">
                                 <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="rememberMe">

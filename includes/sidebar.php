@@ -1,7 +1,7 @@
                 <?php
 
                 // Get Most Read Articles
-                $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id order by RAND() LIMIT 4");
+                $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE article_status=1 order by RAND() LIMIT 4");
                 $stmt->execute();
                 $most_read_articles = $stmt->fetchAll();
                 
@@ -15,10 +15,14 @@
                                 <div class="widget-title">
                                     <h5>Search</h5>
                                 </div>
-                                <div class=" widget-search">
-                                    <form class="search-form" action="search.php" method="POST" enctype="multipart/form-data">
-                                        <input type="search" id="gsearch" name="gsearch" placeholder="Search ....">
-                                        <a href="search.php" class="btn-submit"><i class="las la-search"></i></a>
+                                <div class="widget-search form-flex">
+                                    <form class="search-form">
+                                        <div class="form-group">
+                                            <input type="search" id="searchkeyword" name="searchkeyword" placeholder="Search...">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn-custom">Search</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -34,10 +38,12 @@
                             <div class="widget widget-newsletter">
                                 <h5>Subscribe To Our Newsletter</h5>
                                  <p>No spam, notifications only about new posts, updates.</p>
-                                <form action="subnewsletter.php" class="newslettre-form" method="POST" enctype="multipart/form-data">
-                                    <div class="form-flex">
+                                <form class="newslettre-form">
+                                    <span class="msgspan"></span>
+                                    <br>
+                                    <div class="form-flex mt-2">
                                         <div class="form-group">
-                                            <input type="email" class="form-control" placeholder="Your Email Adress" required="required">
+                                            <input type="email" id="newsletteremail" name="newsletteremail" class="form-control" placeholder="Your Email Adress" required="required">
                                         </div>
                                         <button class="btn-custom" type="submit">Subscribe now</button>
                                     </div>
@@ -51,14 +57,23 @@
                                 </div>
                                 <ul class="widget-popular-posts">
                                     <?php foreach ($most_read_articles as $article) : ?>
+                                        <?php
+                                            $currentview = 1;
+                                            $artid = $article['article_id'];
+                                            $stmt = $conn->prepare("SELECT * FROM postviews WHERE postid = $artid");
+                                            $stmt->execute();
+                                            $postviews = $stmt->fetch();
+                                            if(!empty($postviews["viewcount"]))
+                                            $currentview = $postviews["viewcount"];
+                                        ?>
                                         <!--post1-->
                                         <li class="small-post">
                                             <div class="small-post-image">
                                                 <a href="post-single.php?data=<?=substr($article['article_title'],0,30)."..."?>&id=<?= $components->protect($article['article_id']) ?>">
                                                     <img src="img/article/<?= $article['article_image'] ?>" alt="">
-                                                    <small class="nb">
+                                                    <small class="nb" title="No. of Post Views">
                                                         <!-- number of person that has viewed post -->
-                                                        0
+                                                        <?= $currentview ?>
                                                     </small>
                                                 </a>
                                             </div>

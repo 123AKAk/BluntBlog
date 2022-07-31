@@ -10,8 +10,7 @@
                                 <ul>
                                     <li><a href="./">Homepage</a></li>
                                     <li><a href="about.php">about us</a></li>
-                                    <li><a href="contact.php">contact us</a></li>
-                                    <li><a href="privacy.php">privacy</a></li>
+                                    <li><a href="privacy.php">privacy & Policy</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -24,10 +23,13 @@
                                     <p>Sign up for free and be the first to get notified about new posts.</p>
                                 
                                 </div>
-                                <form action="subnewsletter.php" class="newslettre-form" method="POST" enctype="multipart/form-data">
-                                    <div class="form-flex">
+                                <!-- <form enctype="multipart/form-data" action="subnewsletter.php" class="newslettre-form" data-ajax-method="POST" data-ajax="true" data-ajax-complete="main.AjaxOnComplete" data-ajax-begin="main.AjaxOnBegin" data-ajax-success="main.AjaxOnAddingSucess" data-ajax-failure="main.AjaxOnfailure" id="addemail"> -->
+                                <form class="newslettre-form">
+                                    <span class="msgspan"></span>
+                                    <br>
+                                    <div class="form-flex mt-2">
                                         <div class="form-group">
-                                            <input type="email" class="form-control" placeholder="Your Email Adress" required="required">
+                                            <input type="email" id="newsletteremail" class="form-control newsletteremail" placeholder="Your Email Adress" required="required">
                                         </div>
                                         <button class="submit-btn" type="submit">
                                             <i class="fas fa-paper-plane"></i>
@@ -57,7 +59,7 @@
                     <div class="row">
                        <div class="col-lg-12">
                            <div class="copyright">
-                            <p>© 2022,  BLUNT, All Rights Reserved.</p>
+                            <p>© <?= date("Y") ?>,  <?= $globalname ?>, All Rights Reserved.</p>
                            </div>
                        </div>
                     </div>
@@ -84,8 +86,8 @@
                         <button type="button" class="close">
                             <i class="far fa-times"></i>
                         </button>
-                        <form class="search-form" action="search.php" method="POST" enctype="multipart/form-data">
-                            <input type="search" name="searchkeyword" value="" placeholder="What are you looking for?">
+                        <form class="search-form">
+                            <input type="search" id="searchkeyword" name="searchkeyword" value="" placeholder="What are you looking for?">
                             <button type="submit" class="search-btn"> Search</button>
                         </form>
                     </div>

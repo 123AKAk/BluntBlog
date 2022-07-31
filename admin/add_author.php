@@ -93,7 +93,7 @@
                                             </div>
                                             <br>
                                             <div class="form-group mb-0">
-                                                <button class="btn btn-secondary" type="button">Back</button>
+                                                <button class="btn btn-secondary" type="button" onclick="goback()">Back</button>
                                                 <input class="btn btn-primary" type="submit" name="submit">
                                             </div>
                                         </div>

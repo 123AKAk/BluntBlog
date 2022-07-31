@@ -2,7 +2,7 @@
     $globalname = "BLUNT";
     $siteemail = "admin@bluntechnology.com";
     $siteemailpassword = "5a51EZbK9jKj";
-    $siteemailhost = "mail.whogohost.com";
+    $siteemailhost = "mail.bluntechnology.com";
     $siteemailport = 465;
     $sitemsg = "Check out this Post on ";
     $sitehashtag = "BLUNT BLOGGING NIGERIA";

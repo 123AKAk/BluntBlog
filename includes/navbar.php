@@ -53,26 +53,20 @@
                                         <li>
                                             <a class="dropdown-item" href="list-authors.php"> All authors </a>
                                         </li>
-                                        <li>
-                                            <a class="dropdown-item" href="login.php"> login </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item " href="signup.php">Sign up </a>
-                                        </li>
+                                        
                                     </ul>
                                 </li>
 
                                 <?php if ($loggedin) : ?>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="saved.php"> Saved </a>
+                                        <a class="nav-link" href="usersaved.php"> Saved </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="useraccount.php"> Account </a>
                                     </li>
                                 <?php else : ?>
                                     
                                 <?php endif;  ?>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="contact.php"> contact </a>
-                                </li>
                             </ul>
                         </div>
                         <!--/-->

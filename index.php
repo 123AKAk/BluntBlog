@@ -1,34 +1,39 @@
 <?php
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
+    
     include 'includes/header.php';
     include 'includes/navbar.php';
     
     // Get Latest articles
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id ORDER BY `article_created_time` DESC  LIMIT 2,7");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE article_status=1 ORDER BY `article_created_time` DESC  LIMIT 2,7");
     $stmt->execute();
     $articles = $stmt->fetchAll();
 
     // Get lastest article show on first part of page
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author ORDER BY `article_created_time` DESC LIMIT 1");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE article_status=1 ORDER BY `article_created_time` DESC LIMIT 1");
     $stmt->execute();
     $lastestarticlefirst = $stmt->fetchAll();
 
     // Get best articles
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author ORDER BY `article_created_time` DESC LIMIT 1,1");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE article_status=1 ORDER BY `article_created_time` DESC LIMIT 1,1");
     $stmt->execute();
     $abestarticles = $stmt->fetchAll();
 
     // Get Latest articles
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author ORDER BY `article_created_time` DESC  LIMIT 1");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id INNER JOIN author ON author_id=id_author WHERE article_status=1 ORDER BY `article_created_time` DESC  LIMIT 1");
     $stmt->execute();
     $bestarticles = $stmt->fetchAll();
 
     // Get all categories as list
-    $stmt = $conn->prepare("SELECT * FROM `category` INNER JOIN article ON category_id=id_categorie INNER JOIN author ON author_id=id_author ORDER BY RAND()");
+    $stmt = $conn->prepare("SELECT * FROM `category` INNER JOIN article ON category_id=id_categorie INNER JOIN author ON author_id=id_author WHERE article_status=1 ORDER BY RAND()");
     $stmt->execute();
     $categorieslist = $stmt->fetchAll();
 
     //get editor's choice
-    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=1 INNER JOIN author ON author_id=id_author LIMIT 6");
+    $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=1 INNER JOIN author ON author_id=id_author WHERE article_status=1 LIMIT 6");
     $stmt->execute();
     $editorchoice = $stmt->fetchAll();
 ?> 
@@ -50,12 +55,12 @@
                             <ul class="entry-meta">
                                 <li class="post-author-img"><img src="img/avatar/<?= $article['author_avatar'] ?>" alt="<?= $article['author_fullname'] ?>"></li>
                                 <li class="post-author">
-                                    <a href="author.php?authid=<?= $article['author_id'] ?>">
+                                    <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>">
                                         <?= $article['author_fullname'] ?>
                                     </a>
                                 </li>
                                 <li class="entry-cat">
-                                    <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
+                                    <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1" style="color:<?= $article['category_color'] ?>">
                                         <span class="line"></span> 
                                         <?= $article['category_name'] ?>
                                     </a>
@@ -111,7 +116,7 @@
                         </div>
                         <div class="post-list-category">
                             <div class="entry-cat">
-                                <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
+                                <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1" style="color:<?= $article['category_color'] ?>">
                                     <?= $article['category_name'] ?>
                                 </a>
                             </div>
@@ -137,7 +142,7 @@
                             </div>
                             <div class="post-overly-content">
                                 <div class="entry-cat">
-                                    <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-2">
+                                    <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-2" style="color:<?= $article['category_color'] ?>">
                                         <?= $article['category_name'] ?>
                                     </a>
                                 </div>
@@ -146,7 +151,7 @@
                                 </h3>
                                 <ul class="entry-meta">
                                     <li class="post-author">
-                                        <a href="author.php?authid=<?= $article['author_id'] ?>">
+                                        <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>">
                                             <?= $article['author_fullname'] ?>
                                         </a>
                                     </li>
@@ -201,12 +206,12 @@
                                 <div class="post-list-content">
                                     <ul class="entry-meta">
                                         <li class="entry-cat">
-                                            <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1">
+                                            <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-1" style="color:<?= $article['category_color'] ?>">
                                                 <?= $article['category_name'] ?>
                                             </a>
                                         </li>
                                         <li class="post-author">
-                                            <a href="author.php?authid=<?= $article['author_id'] ?>">
+                                            <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>">
                                                 <span class="line"></span><?= $article['author_fullname'] ?>
                                             </a>
                                         </li>
@@ -257,7 +262,7 @@
                     </div>
                     <div class="post-overly-content">
                         <div class="entry-cat">
-                            <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-2">
+                            <a href="category.php?data=<?=substr($article['category_name'],0,30)."..."?>&catID=<?= $components->protect($article['category_id']) ?>" class="category-style-2" style="color:<?= $article['category_color'] ?>">
                                 <?= $article['category_name'] ?>
                             </a>
                         </div>
@@ -268,7 +273,7 @@
                         </h4>
                         <ul class="entry-meta">
                             <li class="post-author">
-                                <a href="author.php?authid=<?= $article['author_id'] ?>">
+                                <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>">
                                     <?= $article['author_fullname'] ?>
                                 </a>
                             </li>
