@@ -269,23 +269,24 @@
                                         <h4>
                                             <p title="Author <?= $article['author_fullname'] ?>"> <?= $article['author_fullname'] ?></p>
                                             <div class="tags">
+                                                <input value="<?=$components->protect($article['author_id']) ?>" id="authorid" readonly hidden/>
                                                 <ul class="list-inline">
                                                     <li>
                                                     <?php if($loggedin == true)
                                                     {
-                                                        $sql = "SELECT * FROM saved WHERE user_id = :user_id AND post_id = :post_id";
+                                                        $sql = "SELECT * FROM userfollow WHERE user_id = :user_id AND authorid = :authorid";
                                                         $stmt = $pdo->prepare($sql);
-                                                        $stmt->execute(['user_id' => $components->unprotect($realuserid), 'post_id' => $article_id]);
+                                                        $stmt->execute(['user_id' => $components->unprotect($realuserid), 'authorid' => $article['author_id']]);
                                                         if ($stmt->rowCount() == 1) 
                                                         {
                                                     ?>
-                                                        <a href="javascript:void(0);" onclick="unfollowauthor('<?=$components->protect($article['author_id']) ?>', '#realuserid');" id='followauth' title="Unfollow">Follow</a>
+                                                        <a href="javascript:void(0);" onclick="unfollowauthor('#authorid', '#realuserid', 0);" id='followauth0' title="Unfollow">Unfollow</a>
                                                     <?php
                                                         }
                                                         else
                                                         {
                                                     ?>
-                                                        <a href="javascript:void(0);" onclick="followauthor('<?=$components->protect($article['author_id']) ?>', '#realuserid');" id='followauth' title="Follow Author">Follow</a>
+                                                        <a href="javascript:void(0);" onclick="followauthor('#authorid', '#realuserid');" id='followauth' title="Follow Author">Follow</a>
                                                     <?php        
                                                         }
                                                     }
@@ -400,7 +401,7 @@
 
                                 <?php foreach ($comments as $comment) : ?>
                                     <!--comment1-->
-                                    <li class="comment-item pt-0">
+                                    <li class="comment-item pt-0 mt-3">
                                         <div class="content">
                                             <div class="meta">
                                                 <ul class="list-inline">

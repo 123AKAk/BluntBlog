@@ -69,11 +69,12 @@
     function followauthor(authorid, userid)
     {
         var realuserid = $(userid).val();
+        var realauthorid = $(authorid).val();
         
         $.post('assets/followauth.php', {
             namespace: "follow",
             userid: realuserid,
-            authorid: authorid
+            authorid: realauthorid
         },
         function(data) 
         {
@@ -84,21 +85,42 @@
             }
         });
     }
-    function unfollowauthor(authorid, userid)
+    function unfollowauthor(authorid, userid, num)
     {
         var realuserid = $(userid).val();
+        var realauthorid = $(authorid).val();
         
         $.post('assets/followauth.php', {
             namespace: "unfollow",
             userid: realuserid,
-            authorid: authorid
+            authorid: realauthorid
         },
         function(data) 
         {
             var result = JSON.parse(data);
             if(result.response == true)
             {
-                $( "#followauth" ).replaceWith("<a title='Follow' href='javascript:void(0);' onclick='followauthor('#authorid', '#realuserid');' id='followauth'> Follow </a>");
+                $( "#followauth"+num ).replaceWith("<a title='Follow' href='javascript:void(0);' onclick='followauthor('#authorid', '#realuserid');' id='followauth"+num+"'> Follow </a>");
+            }
+        });
+    }
+
+    function aunfollowauthor(authorid, userid, num)
+    {
+        var realuserid = $(userid).val();
+        var realauthorid = $(authorid).val();
+        
+        $.post('assets/followauth.php', {
+            namespace: "unfollow",
+            userid: realuserid,
+            authorid: realauthorid
+        },
+        function(data) 
+        {
+            var result = JSON.parse(data);
+            if(result.response == true)
+            {
+                location.reload();
             }
         });
     }
@@ -109,66 +131,66 @@
      * { AjaxOnBegin, AjaxOnSucess, AjaxOnComplete, AjaxOnfailure }
      * 
     **/
-    main.AjaxOnAddingSucess = function AjaxOnSucess(result) 
-    {
-        //alert(result);
-        var suq = JSON.parse(result);
+    // main.AjaxOnAddingSucess = function AjaxOnSucess(result) 
+    // {
+    //     //alert(result);
+    //     var suq = JSON.parse(result);
 
-        if (suq.response == true) 
-        {
-            //alertify.set({ delay: 90000 });
-            alertify.success(suq.message);
-        }
-        else
-        {
-            alertify.error(suq.message);
-        }
-    }
-    main.AjaxOnSettingAdded = function AjaxOnSettingAdded(result) {
-        // alert(result);
-        var suq = JSON.parse(result);
+    //     if (suq.response == true) 
+    //     {
+    //         //alertify.set({ delay: 90000 });
+    //         alertify.success(suq.message);
+    //     }
+    //     else
+    //     {
+    //         alertify.error(suq.message);
+    //     }
+    // }
+    // main.AjaxOnSettingAdded = function AjaxOnSettingAdded(result) {
+    //     // alert(result);
+    //     var suq = JSON.parse(result);
 
-        alertify.set({ delay: 10000 });
-        if (suq.response == true) 
-        {
-            alertify.success('Added successfully');
-        } else {
-            alertify.error(suq.message);
-        }
-    }
-    main.AjaxOnSettingUpdate = function AjaxOnSettingUpdate(result) {
-        alert(result);
-        var suq = JSON.parse(result);
+    //     alertify.set({ delay: 10000 });
+    //     if (suq.response == true) 
+    //     {
+    //         alertify.success('Added successfully');
+    //     } else {
+    //         alertify.error(suq.message);
+    //     }
+    // }
+    // main.AjaxOnSettingUpdate = function AjaxOnSettingUpdate(result) {
+    //     alert(result);
+    //     var suq = JSON.parse(result);
 
-        alertify.set({ delay: 10000 });
-        if (suq.response == true) 
-        {
-            alertify.success('Updated successfully');
-        } 
-        else
-        {
-            alertify.error(suq.message);
-        }
-    }
-    main.AjaxOnUpdateSucess = function AjaxOnSucess(result) {
-        var suq = JSON.parse(result);
+    //     alertify.set({ delay: 10000 });
+    //     if (suq.response == true) 
+    //     {
+    //         alertify.success('Updated successfully');
+    //     } 
+    //     else
+    //     {
+    //         alertify.error(suq.message);
+    //     }
+    // }
+    // main.AjaxOnUpdateSucess = function AjaxOnSucess(result) {
+    //     var suq = JSON.parse(result);
 
-        alertify.set({ delay: 50000 });
-        alertify.success('Update successful');
-        if (suq != "")
-        {
-            alertify.log('redirecting...');
-            //window.location.href = suq.message;
-        }
-    }
-    main.AjaxOnComplete = function AjaxOnComplete() {
+    //     alertify.set({ delay: 50000 });
+    //     alertify.success('Update successful');
+    //     if (suq != "")
+    //     {
+    //         alertify.log('redirecting...');
+    //         //window.location.href = suq.message;
+    //     }
+    // }
+    // main.AjaxOnComplete = function AjaxOnComplete() {
         
-    }
-    main.AjaxOnBegin = function AjaxOnBegin() {
+    // }
+    // main.AjaxOnBegin = function AjaxOnBegin() {
 
-    }
-    main.AjaxOnfailure = function AjaxOnfailure() {
-        alertify.error("Task failed successfully (no comments).");
-    }
+    // }
+    // main.AjaxOnfailure = function AjaxOnfailure() {
+    //     alertify.error("Task failed successfully (no comments).");
+    // }
 
 

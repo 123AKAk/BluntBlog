@@ -6,7 +6,7 @@
     if($_POST["namespace"] == "follow")
     {
         $userid = trim($components->unprotect($_POST["userid"]));
-        $postid = trim($components->unprotect($_POST["authorid"]));
+        $authorid = trim($components->unprotect($_POST["authorid"]));
         try
         {
             $sql = "SELECT * FROM userfollow WHERE user_id = :user_id AND authorid = :authorid";

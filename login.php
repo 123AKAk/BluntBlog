@@ -89,9 +89,8 @@
                                     else
                                     {
                                         // Redirect user to welcome page
-                                        echo "Okay na, I go fight you today. BY FORCE";
-                                        // header("location: index.php");
-                                        // exit;
+                                        header("location: index.php");
+                                        exit;
                                     }
                                 }
                             }

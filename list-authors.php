@@ -36,7 +36,7 @@
             <div class="authors-area">
                 <div class="row">
                     <input value="<?= $realuserid ?>" id="realuserid" readonly hidden/>
-                    <?php foreach ($authors as $author) :?>
+                    <?php $numcount = 1; foreach ($authors as $author) : $numcount++;?>
                     <!--author-1-->
                     <div class="col-md-6 ">
                         <div class="authors-single">
@@ -51,23 +51,24 @@
                                         <a href="author.php?authid=<?=  $components->protect($author['author_id']) ?>"><?= $author['author_fullname'] ?></a>
                                     </h6>
                                     <div class="tags">
+                                        <input value="<?=$components->protect($author['author_id']) ?>" id="authorid<?= $numcount?>" readonly hidden/>
                                         <ul class="list-inline">
                                             <li>
                                             <?php if($loggedin == true)
                                             {
-                                                $sql = "SELECT * FROM saved WHERE user_id = :user_id AND post_id = :post_id";
+                                                $sql = "SELECT * FROM userfollow WHERE user_id = :user_id AND authorid = :authorid";
                                                 $stmt = $pdo->prepare($sql);
-                                                $stmt->execute(['user_id' => $components->unprotect($realuserid), 'post_id' => $article_id]);
+                                                $stmt->execute(['user_id' => $components->unprotect($realuserid), 'authorid' => $author['author_id']]);
                                                 if ($stmt->rowCount() == 1) 
                                                 {
                                             ?>
-                                                <a href="javascript:void(0);" onclick="unfollowauthor('<?=$components->protect($author['author_id']) ?>', '#realuserid');" id='followauth' title="Unfollow">Follow</a>
+                                                <a href="javascript:void(0);" onclick="unfollowauthor('#authorid<?= $numcount?>', '#realuserid', <?= $numcount?>);" id='followauth<?= $numcount?>' title="Unfollow">Unfollow</a>
                                             <?php
                                                 }
                                                 else
                                                 {
                                             ?>
-                                                <a href="javascript:void(0);" onclick="followauthor('<?=$components->protect($author['author_id']) ?>', '#realuserid');" id='followauth' title="Follow Author">Follow</a>
+                                                <a href="javascript:void(0);" onclick="followauthor('#authorid<?= $numcount?>', '#realuserid');" id='followauth' title="Follow Author">Follow</a>
                                             <?php        
                                                 }
                                             }
