@@ -4,7 +4,6 @@
     require 'assets/sharedComponents.php';
     $components = new SharedComponents();
     
-    session_start();
     // Check if the user is already logged in, if no then redirect him to welcome page
     if (!isset($_SESSION["blunt_blog_user_loggedin_"])){
         header("location: index.php");

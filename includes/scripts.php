@@ -30,13 +30,6 @@
     <script src="assets/vendor/jquery/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="assets/vendor/jquery/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
 
-    <script>
-        function savepost()
-        {
-            alert("Feature not Available yet");
-        }
-    </script>
-
     <script src="assets/js/mainscripts.js"></script>
 
 </body>

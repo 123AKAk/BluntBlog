@@ -3,13 +3,17 @@
     require "assets/varnames.php";
     require 'assets/sharedComponents.php';
     $components = new SharedComponents();
-    
-    session_start();
 
     // Check if the user is already logged in, if no then redirect him to welcome page
-    if (!isset($_SESSION["blunt_blog_user_loggedin_"])){
+    if (isset($_SESSION["blunt_blog_user_loggedin_"])){
+        $_SESSION["blunt_blog_user_loggedin_"] = $components->unprotect($_SESSION["blunt_blog_user_loggedin_"]);
+        if ($_SESSION["blunt_blog_user_loggedin_"] == true && isset($_SESSION["blunt_blog_user_status_"])){
+            $_SESSION["blunt_blog_user_loggedin_"] = $components->protect($_SESSION["blunt_blog_user_loggedin_"]);
+        }
+    }
+    else
+    {
         header("location: index.php");
-        exit;
     }
     include 'includes/header.php';
     include 'includes/navbar.php';

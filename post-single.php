@@ -261,12 +261,47 @@
                             <div class="post-single-author ">
                                 <div class="authors-info">
                                     <div class="image">
-                                        <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>" class="image" title="Post Author Image">
+                                        <a href="author.php?authid=<?=  $components->protect($article['author_id']) ?>" class="image" title="Author <?= $article['author_fullname'] ?> Image">
                                             <img src="img/avatar/<?= $article['author_avatar'] ?>" alt="">
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h4 title="Post Author Name"><?= $article['author_fullname'] ?></h4>
+                                        <h4>
+                                            <p title="Author <?= $article['author_fullname'] ?>"> <?= $article['author_fullname'] ?></p>
+                                            <div class="tags">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                    <?php if($loggedin == true)
+                                                    {
+                                                        $sql = "SELECT * FROM saved WHERE user_id = :user_id AND post_id = :post_id";
+                                                        $stmt = $pdo->prepare($sql);
+                                                        $stmt->execute(['user_id' => $components->unprotect($realuserid), 'post_id' => $article_id]);
+                                                        if ($stmt->rowCount() == 1) 
+                                                        {
+                                                    ?>
+                                                        <a href="javascript:void(0);" onclick="unfollowauthor('<?=$components->protect($article['author_id']) ?>', '#realuserid');" id='followauth' title="Unfollow">Follow</a>
+                                                    <?php
+                                                        }
+                                                        else
+                                                        {
+                                                    ?>
+                                                        <a href="javascript:void(0);" onclick="followauthor('<?=$components->protect($article['author_id']) ?>', '#realuserid');" id='followauth' title="Follow Author">Follow</a>
+                                                    <?php        
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                    ?>
+                                                        <a href="login.php" title="Follow Author">
+                                                            Follow
+                                                        </a>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </h4>
                                         <p><?= $article['author_desc'] ?></p>
                                     </div>
                                 </div>

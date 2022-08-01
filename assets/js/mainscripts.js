@@ -65,6 +65,43 @@
             }
         });
     }
+
+    function followauthor(authorid, userid)
+    {
+        var realuserid = $(userid).val();
+        
+        $.post('assets/followauth.php', {
+            namespace: "follow",
+            userid: realuserid,
+            authorid: authorid
+        },
+        function(data) 
+        {
+            var result = JSON.parse(data);
+            if(result.response == true)
+            {
+                $( "#followauth" ).replaceWith("<a title='Unfollow' href='javascript:void(0);' onclick='unfollowauthor('#authorid', '#realuserid');' id='followauth'> Unfollow </a>");
+            }
+        });
+    }
+    function unfollowauthor(authorid, userid)
+    {
+        var realuserid = $(userid).val();
+        
+        $.post('assets/followauth.php', {
+            namespace: "unfollow",
+            userid: realuserid,
+            authorid: authorid
+        },
+        function(data) 
+        {
+            var result = JSON.parse(data);
+            if(result.response == true)
+            {
+                $( "#followauth" ).replaceWith("<a title='Follow' href='javascript:void(0);' onclick='followauthor('#authorid', '#realuserid');' id='followauth'> Follow </a>");
+            }
+        });
+    }
     
     /**
      * 

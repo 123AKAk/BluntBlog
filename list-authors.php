@@ -35,7 +35,7 @@
         <div class="container-fluid">
             <div class="authors-area">
                 <div class="row">
-                    
+                    <input value="<?= $realuserid ?>" id="realuserid" readonly hidden/>
                     <?php foreach ($authors as $author) :?>
                     <!--author-1-->
                     <div class="col-md-6 ">
@@ -47,15 +47,50 @@
                             </div>
                             <div class="authors-single-content ">
                                 <div class="left">
-                                    <h6> <a href="author.php?authid=<?=  $components->protect($author['author_id']) ?>"><?= $author['author_fullname'] ?></a></h6>
-                                    <p>
-                                    <?php
+                                    <h6>
+                                        <a href="author.php?authid=<?=  $components->protect($author['author_id']) ?>"><?= $author['author_fullname'] ?></a>
+                                    </h6>
+                                    <div class="tags">
+                                        <ul class="list-inline">
+                                            <li>
+                                            <?php if($loggedin == true)
+                                            {
+                                                $sql = "SELECT * FROM saved WHERE user_id = :user_id AND post_id = :post_id";
+                                                $stmt = $pdo->prepare($sql);
+                                                $stmt->execute(['user_id' => $components->unprotect($realuserid), 'post_id' => $article_id]);
+                                                if ($stmt->rowCount() == 1) 
+                                                {
+                                            ?>
+                                                <a href="javascript:void(0);" onclick="unfollowauthor('<?=$components->protect($author['author_id']) ?>', '#realuserid');" id='followauth' title="Unfollow">Follow</a>
+                                            <?php
+                                                }
+                                                else
+                                                {
+                                            ?>
+                                                <a href="javascript:void(0);" onclick="followauthor('<?=$components->protect($author['author_id']) ?>', '#realuserid');" id='followauth' title="Follow Author">Follow</a>
+                                            <?php        
+                                                }
+                                            }
+                                            else
+                                            {
+                                            ?>
+                                                <a href="login.php" title="Follow Author">
+                                                    Follow
+                                                </a>
+                                            <?php
+                                            }
+                                            ?>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <p class="ml-2">
+                                        <?php
                                         //get author post total
                                         $authid = $author['author_id'];
                                         $stmt = $conn->prepare("SELECT * FROM `article` WHERE id_author='$authid'");
                                         $stmt->execute();
                                         echo $stmt->rowCount();
-                                    ?> Post</p>
+                                        ?> Post</p>
                                 </div>
                                 <div class="right">
                                     <a href="author.php?authid=<?=  $components->protect($author['author_id']) ?>">
