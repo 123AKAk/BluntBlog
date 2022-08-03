@@ -11,7 +11,6 @@
 
     <!-- JS Plugins  -->
     <script  src="assets/js/theia-sticky-sidebar.js"></script>
-    <script src="assets/js/ajax-contact.php"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
     <script src="assets/js/switch.js"></script>
     <script src="assets/js/jquery.marquee.js"></script>

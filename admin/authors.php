@@ -67,7 +67,14 @@
                                             <?php
                                                 $countnum = 0;
                                                 foreach ($authors as $author) :
-                                                    echo $author['type'] == 0 ? "<tr style='background:#f1f2f6; '>" : "<tr>";
+                                                    if($author['type'] == 0)
+                                                    {
+                                                        echo $author['type'] == 0 ? "<tr style='background:#f1f2f6; '>" : "<tr>";
+                                                    }
+                                                    else if($author['type'] == 2)
+                                                    {
+                                                        echo "<tr style='background:#b3b4b6; '>";   
+                                                    }
                                                     $countnum++
                                                     ?>
                                                     <td>

@@ -42,7 +42,7 @@ if (isset($_SESSION["blunt_blog_user_loggedin_"])){
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/custom.css">
 
-    <?php includeWithVariables('metatags.php', array('metatitle' => empty($returntitle) ? $globalname :  $returntitle )); ?>
+    <?php include 'includes/metatags.php'; ?>
 
     <script>
         function sharefunc()

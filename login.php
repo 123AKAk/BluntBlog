@@ -69,11 +69,9 @@
                             if(password_verify($password, $hashed_password)) {
                                 if($type == 1){
                                     $email_err = "Account has been Banned, Contact the Adminstrator for more details";
-                                    return;
                                 }
                                 else if($userstatus == 0){
-                                    $email_err = "Account has not been Verified";
-                                    return;
+                                    $email_err = "Account has not been Verified, check your email for Verification link";
                                 }
                                 else{
                                     // Store data in session variables

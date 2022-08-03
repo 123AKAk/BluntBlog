@@ -65,7 +65,7 @@ function displayoutput($status, $txt)
             <h4>Error!</h4>
             ".$txt."
         </div>
-        <p>You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
+        <p> <a href='' style='font-weight:bold;'>Try Again</a> <br> You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
         ";
     }
     else if($status == true)
@@ -75,7 +75,7 @@ function displayoutput($status, $txt)
             <h4>Success!</h4>
             ".$txt."
         </div>
-        <p>You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
+        <p>You may <a href='login.php' style='font-weight:bold;'>Login</a> or Go back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
         ";
     }
     else
@@ -85,7 +85,7 @@ function displayoutput($status, $txt)
             <h4>Success!</h4>
             ".$txt."
         </div>
-        <p>You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
+        <p>You may <a href='login.php' style='font-weight:bold;'>Login</a> or Go back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
         ";   
     }
 

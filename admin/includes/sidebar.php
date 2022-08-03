@@ -92,6 +92,9 @@
                             </span>
                         </a>
                         <ul class="sub-menu">
+                            <?php if($type == 2)
+                            {
+                            ?>
                             <li>
                                 <a href="add_author.php">
                                     <span class="icon-dash">
@@ -101,6 +104,9 @@
                                     </span>
                                 </a>
                             </li>
+                            <?php
+                            }
+                            ?>
                             <li>
                                 <a href="authors.php">
                                     <span class="icon-dash">

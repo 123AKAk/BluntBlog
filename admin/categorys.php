@@ -61,7 +61,7 @@
                                             </thead>
                                             <tbody>
                                             <?php
-                                                $countnum = 1;
+                                                $countnum = 0;
                                                 foreach ($categories as $category) :
                                                     echo "<tr>";
                                                     $countnum++

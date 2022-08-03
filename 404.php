@@ -1,6 +1,10 @@
 <?php
 
     $errmsg = $_GET["err"];
+    require "assets/db.php";
+    require "assets/varnames.php";
+    require 'assets/sharedComponents.php';
+    $components = new SharedComponents();
     
     include 'includes/header.php';
     include 'includes/navbar.php';

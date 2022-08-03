@@ -6,6 +6,7 @@
     
     include 'includes/header.php';
     include 'includes/navbar.php';
+
     
     // Get Latest articles
     $stmt = $conn->prepare("SELECT * FROM `article` INNER JOIN category ON id_categorie=category_id WHERE article_status=1 ORDER BY `article_created_time` DESC  LIMIT 2,7");

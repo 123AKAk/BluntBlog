@@ -86,7 +86,7 @@
                 <!--content-->
                 <div class="" style="justify-content: center; display: flex;">
                     <div class="row theiaStickySidebar">
-                        <div class="card p-2">
+                        <div class=" p-2">
                             <h3><span class="text-success"><?= $email_succ; ?></span></h3>
                             <form  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="sign-form widget-form " method="POST">
                                 <div class="form-group">

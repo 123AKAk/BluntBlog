@@ -92,7 +92,7 @@
                     </div>
 
                     <div class="botton-sub">
-                        <a class="btn-subscribe" href="<?= ($loggedin) ? 'Logout.php' : 'login.php'; ?>">
+                        <a class="btn-subscribe" href="<?= ($loggedin) ? 'logout.php' : 'login.php'; ?>">
                             <?= ($loggedin) ? 'Logout' : 'Login'; ?>
                         </a>
                     </div>

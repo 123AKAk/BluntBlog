@@ -72,7 +72,7 @@ if ($conn) {
 
                     // Call insert function
                     $resultmsg = insertToDB($conn, $type, $data);
-                    if($resultmsg == 11)
+                    if($resultmsg != 0)
                     {
                         $_SESSION["adminsuc"] = "Category Created Successfully";
                         header("Location: ../admin/add_category.php", true, 301);
@@ -94,22 +94,40 @@ if ($conn) {
 
             case "author":
 
+                $sql = "SELECT * FROM author WHERE author_email = :author_email";
+                if ($stmt = $conn->prepare($sql)) {
+                $param_email = trim($_POST["authEmail"]);
+                $stmt->bindParam(":author_email", $param_email, PDO::PARAM_STR);
+                if ($stmt->execute()) {
+                if ($stmt->rowCount() == 1) {
+                    $_SESSION["adminerra"] = "There is an account with that Email.";
+                        header("Location: ../admin/add_author.php", true, 301);
+                        exit;
+                }}}
+
                 // Upload Image
-                
                 $picuploadmsg = uploadImage2("authImage", "../img/avatar/");
 
                 if($picuploadmsg == 11)
                 {
+                    $set = 'EYO1BLUNT2AKAK3';
+                    $code = substr(str_shuffle($set), 0, 12);
+
+                    //hash password
+                    $password = $code;
+                    $hashpassword = password_hash($password, PASSWORD_DEFAULT);
+
                     // PREPARE DATA TdO INSERT INTO DB
                     $data = array(
                         "author_fullname" => test_input($_POST["authName"]),
                         "author_desc" => test_input($_POST["authDesc"]),
                         "author_email" =>  test_input($_POST["authEmail"]),
+                        "password" =>  test_input($hashpassword),
                         "author_twitter" =>  test_input($_POST["authTwitter"]),
                         "auth_instagram" => test_input($_POST["authInstagram"]),
                         "auth_facebook" => test_input($_POST["authFacebook"]),
                         "author_avatar" => test_input($_FILES["authImage"]["name"]),
-                        "type" => test_input(1)
+                        "type" => test_input(0)
                     );
 
                     $tableName = 'author';
@@ -118,8 +136,6 @@ if ($conn) {
                     $resultmsg = insertToDB($conn, $tableName, $data);
                     if($resultmsg != 0)
                     {
-                        $set = 'EYO1BLUNT2AKAK3';
-                        $code = substr(str_shuffle($set), 0, 12);
 
                         require 'sendmail.php';
                         $model = new send_Mail();
@@ -128,7 +144,7 @@ if ($conn) {
                         if($mailresult["response"] == true)
                         {
                             $_SESSION["adminsuc"] = "Author Created Successfully";
-                            header("Location: adminlogin.php?admsg=active", true, 301);
+                            header("Location: ../admin/authors.php", true, 301);
                             exit;
                         }
                         else

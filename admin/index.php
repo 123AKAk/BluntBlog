@@ -81,7 +81,6 @@
                             <div class="card-body dd-flex align-items-center">
                                 <h3>Author(s)</h3>
                                 <div class="icon-info-text">
-                                    <h5 class="ad-title">No. of Authors</h5>
                                     <h4 class="ad-card-title"><?= $authorcount ?></h4>
                                 </div>
                             </div>

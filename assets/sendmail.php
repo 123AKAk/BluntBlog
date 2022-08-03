@@ -51,7 +51,7 @@ class send_Mail
             $mail->isHTML(true);
             $mail->Subject = 'Admin Registration Successful - '.$globalname;
             $mail->Body    = $message;
-            $mail->AltBody = "Thank you for Registering on $globalname Blog | Your Account Information: Email - ".$email.", Password: ".$password." <a href='".$url."'>Activate your Account</a>";
+            $mail->AltBody = "Thank you for Registering on $globalname Blog | Your Account Information: Email - ".$email.", Password: ".$password." <a href='".$url."'>$url</a>";
 
             $mail->send();
 
@@ -115,7 +115,7 @@ class send_Mail
             $mail->isHTML(true);
             $mail->Subject = 'User SignUp Successful - '.$globalname;
             $mail->Body    = $message;
-            $mail->AltBody = "Thank you for Registering on $globalname Blog | Your Account Information: Email - ".$email.", Password: ".$password." <a href='".$url."'>Activate your Account</a>";
+            $mail->AltBody = "Thank you for Registering on $globalname Blog | Your Account Information: Email - ".$email.", Password: ".$password." <a href='".$url."'>$url</a>";
 
             $mail->send();
 
@@ -151,7 +151,7 @@ class send_Mail
             $url.= $_SERVER['HTTP_HOST']."/blog/adminaccountreset.php?code=".$code."&userid=".$userid."";
         }
         else
-        $url.= $_SERVER['HTTP_HOST']."/blog/accountreset.php?code=".$code."&userid=".$userid."";
+        $url.= $_SERVER['HTTP_HOST']."/blog/useraccountreset.php?code=".$code."&userid=".$userid."";
         // Append the requested resource location to the URL
         //$url.= $_SERVER['REQUEST_URI'];
 
@@ -183,7 +183,7 @@ class send_Mail
             $mail->isHTML(true);
             $mail->Subject = $globalname.' - Account Reset';
             $mail->Body    = $message;
-            $mail->AltBody = "$globalname - Forgot Password. | Your Account Information: Email - ".$email.", Password: ".$password." <a href='".$url."'>Reset account password</a>";
+            $mail->AltBody = "$globalname - Forgot Password. | Your Account Information: Email - ".$email.", Password: ".$password." <a href='".$url."'>$url</a>";
 
             $mail->send();
 
@@ -239,7 +239,7 @@ class send_Mail
             $mail->isHTML(true);
             $mail->Subject = $globalname.' - Account Reset';
             $mail->Body    = $message;
-            $mail->AltBody = "Thanks for subscribing to our news letter updates, expect more from us. To Unsubcribe click <a href='$url'>here</a>";
+            $mail->AltBody = "Thanks for subscribing to our news letter updates, expect more from us. To Unsubcribe click <a href='$url'>$url</a>";
 
             $mail->send();
 

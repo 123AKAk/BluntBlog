@@ -86,6 +86,8 @@
     <!-- blog-author-->
     <section class="blog-author mt-30">
         <div class="container-fluid">
+            <h3>'<?= $author['author_fullname'] ?>' Posts</h3>
+            <br>
             <div class="row">
                 <!--content-->
                 <div class="col-lg-8 oredoo-content">

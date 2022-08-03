@@ -24,12 +24,12 @@
                                 
                                 </div>
                                 <!-- <form enctype="multipart/form-data" action="subnewsletter.php" class="newslettre-form" data-ajax-method="POST" data-ajax="true" data-ajax-complete="main.AjaxOnComplete" data-ajax-begin="main.AjaxOnBegin" data-ajax-success="main.AjaxOnAddingSucess" data-ajax-failure="main.AjaxOnfailure" id="addemail"> -->
-                                <form class="newslettre-form">
-                                    <span class="msgspan"></span>
+                                <form class="newslettre-form" id="bnewslettre-form">
+                                    <span style="color:whitesmoke;" id="bmsgspan"></span>
                                     <br>
                                     <div class="form-flex mt-2">
                                         <div class="form-group">
-                                            <input type="email" id="newsletteremail" class="form-control newsletteremail" placeholder="Your Email Adress" required="required">
+                                            <input type="email" id="bnewsletteremail" class="form-control" placeholder="Your Email Adress" required="required">
                                         </div>
                                         <button class="submit-btn" type="submit">
                                             <i class="fas fa-paper-plane"></i>

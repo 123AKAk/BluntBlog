@@ -9,10 +9,10 @@ include 'includes/navbar.php';
 ?>
 <?php
 
-    if(!isset($_GET['code']) && !isset($_GET['userid']))
+    if(isset($_GET['code']) && isset($_GET['userid']))
     {
-        header("location: 404.php?err=Error Verification Failed, Invalid User Indentification");
-        exit;
+        $_SESSION["resetcode"] = $_GET['code'];
+        $_SESSION["resetaccountid"] = $_GET['userid'];
     }
 
     session_start();
@@ -24,76 +24,91 @@ include 'includes/navbar.php';
     // Processing form data when form is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
-        // Check if all password is empty
-        if (empty(trim($_POST["password"]))) {
-            $password_err = "Enter your Password.";
-        }    
-        else if (empty(trim($_POST["confrimpassword"]))) {
-            $_SESSION["password"] = trim($_POST["password"]);
-            $confrimpassword_err = "Confrim your Password.";
-        }
-        else if ($_POST["confrimpassword"] != $_POST["password"]){
-            $confrimpassword_err = "Passwords does not Match.";
-        }
-        else {
-            $password = trim($_POST["password"]);
-        }
+        if(isset($_SESSION['resetcode']) && isset($_SESSION['resetaccountid']))
+        {
+
+            // Check if all password is empty
+            if (empty(trim($_POST["password"]))) {
+                $password_err = "Enter your Password.";
+            }    
+            else if (empty(trim($_POST["confrimpassword"]))) {
+                $confrimpassword_err = "Confrim your Password.";
+            }
+            else if ($_POST["confrimpassword"] != $_POST["password"]){
+                $confrimpassword_err = "Passwords does not Match.";
+            }
+            else {
+                $password = trim($_POST["password"]);
+            }
 
 
-        // Validate credentials
-        if (empty($password_err) && empty($confrimpassword_err)) {
+            // Validate credentials
+            if (empty($password_err) && empty($confrimpassword_err)) {
 
-            $userid = $components->unprotect($_GET["userid"]);
+                $userid = $components->unprotect($_SESSION['resetaccountid']);
 
-            // Prepare a select statement
-            $sql = "SELECT * FROM users WHERE id = :id";
-            if ($stmt = $pdo->prepare($sql)) 
-            {
-                $stmt->bindParam(":id", $userid, PDO::PARAM_STR);
-                if ($stmt->execute()) 
+                // Prepare a select statement
+                $sql = "SELECT * FROM users WHERE id = :id";
+                if ($stmt = $pdo->prepare($sql)) 
                 {
-                    if ($stmt->rowCount() == 1) 
+                    $stmt->bindParam(":id", $userid, PDO::PARAM_STR);
+                    if ($stmt->execute()) 
                     {
-                        if ($row = $stmt->fetch()) 
+                        if ($stmt->rowCount() == 1) 
                         {
-                            $username = $row["username"];
-                            $usercode = $row["code"];
-                            if ($usercode == $_GET["code"])
+                            if ($row = $stmt->fetch()) 
                             {
-                                $hashpassword = password_hash($password, PASSWORD_DEFAULT);
-                                //update user password
-                                $bsql = "UPDATE users SET password=:password WHERE id=:id";
-                                $stmt= $pdo->prepare($bsql);
-                                $stmt->execute(['password' => $hashpassword, 'id' => $userid]);
-                                if ($stmt->rowCount()) {
-                                    header("Location: login.php?newadmsg=active");
-                                    exit;
+                                $username = $row["username"];
+                                $usercode = $row["code"];
+                                if ($usercode == $_SESSION['resetcode'])
+                                {
+                                    $hashpassword = password_hash($password, PASSWORD_DEFAULT);
+                                    //update user password
+                                    $bsql = "UPDATE users SET password=:password WHERE id=:id";
+                                    $stmt= $pdo->prepare($bsql);
+                                    $stmt->execute(['password' => $hashpassword, 'id' => $userid]);
+                                    if ($stmt->rowCount()) {
+
+                                        unset($_SESSION['resetcode']);
+                                        unset($_SESSION['resetaccountid']);
+                                        if(isset($_SESSION["main_err"]))
+                                        {
+                                            unset($_SESSION["main_err"]);
+                                        }
+
+                                        header("Location: login.php?newadmsg=active");
+                                        exit;
+                                    }
+                                    else
+                                    {
+                                        $_SESSION["main_err"] = "Error Updating Account, contact site administrator";
+                                    }
                                 }
                                 else
                                 {
-                                    $_SESSION["main_err"] = "Error Updating Password, contact site administrator";
+                                    $_SESSION["main_err"] = "User Codes Doesn't Match";
                                 }
                             }
-                            else
-                            {
-                                $_SESSION["main_err"] = "User Codes Doesn't Match";
-                            }
+                        }
+                        else 
+                        {
+                            $_SESSION["main_err"] = "No account found with gotten User Identification.";
                         }
                     }
-                    else 
+                    else
                     {
-                        $_SESSION["main_err"] = "No account found with User Identification.";
+                        $_SESSION["main_err"] = "Oops! Something went wrong. Please try again later.";
                     }
+                    unset($stmt);
                 }
-                else
-                {
-                    $_SESSION["main_err"] = "Oops! Something went wrong. Please try again later.";
-                }
-                unset($stmt);
             }
+            // Close connection
+            unset($pdo);
         }
-        // Close connection
-        unset($pdo);
+        else
+        {
+            $_SESSION["main_err"] = "No account found with gotten User Identification.";   
+        }
     }
     
 ?>

@@ -1,22 +1,40 @@
     //runs all javascript methods 
 
-    $( ".newslettre-form" ).submit(function( event ) 
+    $( "#anewslettre-form" ).submit(function( event ) 
     {
-        $.post('assets/subnewsletter.php', {
-            email: $( "#newsletteremail" ).val()
-        },
-        function(data) 
+        var aemail = $( "#anewsletteremail" ).val();
+        
+        let formdata = new FormData();
+        formdata.append("email", $( "#anewsletteremail" ).val());
+
+        let loca = "assets/subnewsletter.php";
+        fetch(loca, { method: "POST", body: formdata })
+        .then(res => res.text())
+        .then(data => 
         {
             var result = JSON.parse(data);
-            if(result.response === true){
-                $( ".msgspan" ).text( result.message ).show().fadeOut( 5000 );
-                return;
-            }
-            else{
-                $( ".msgspan" ).text( result.message ).show().fadeOut( 5000 );
-                return;
-            }
+            $( "$amsgspan" ).text( result.message ).show().fadeOut( 5000 );
         });
+            
+        event.preventDefault();
+    }); 
+    
+    $( "#bnewslettre-form" ).submit(function( event ) 
+    {
+        var aemail = $( "#bnewsletteremail" ).val();
+        
+        let formdata = new FormData();
+        formdata.append("email", $( "#bnewsletteremail" ).val());
+
+        let loca = "assets/subnewsletter.php";
+        fetch(loca, { method: "POST", body: formdata })
+        .then(res => res.text())
+        .then(data => 
+        {
+            var result = JSON.parse(data);
+            $( "#bmsgspan" ).text( result.message ).show().fadeOut( 5000 );
+        });
+            
         event.preventDefault();
     }); 
 

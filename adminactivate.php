@@ -11,10 +11,10 @@ if(isset($_GET["userid"]) && isset($_GET["code"]))
 {
     $id = $components->unprotect($_GET["userid"]);
 
-    $sql = "SELECT * FROM users WHERE id = :id";
+    $sql = "SELECT * FROM author WHERE author_id = :author_id";
     if ($stmt = $pdo->prepare($sql)) 
     {
-        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+        $stmt->bindParam(":author_id", $id, PDO::PARAM_STR);
         if ($stmt->execute()) 
         {
             if ($stmt->rowCount() == 1) 
@@ -30,16 +30,24 @@ if(isset($_GET["userid"]) && isset($_GET["code"]))
                     else
                     {
                         // update userstatus
-                        $bsql = "UPDATE users SET userstatus=:userstatus WHERE id=:id";
+                        $bsql = "UPDATE author SET userstatus=:userstatus WHERE author_id=:author_id";
                         $stmt= $pdo->prepare($bsql);
-                        $stmt->execute(['userstatus' => 1, 'id' => $id]);
+                        $stmt->execute(['userstatus' => 1, 'author_id' => $id]);
                         if ($stmt->rowCount()) {
                             $displayoutput = displayoutput(true, "Account Verfication Successful");
+                        }
+                        else
+                        {
+                            $displayoutput = displayoutput(false, "Verification Error");
                         }
                         //return $stmt->rowCount() ? 1 : 0;
                     }
                 }
-            } 
+                else
+                {
+                    $displayoutput = displayoutput(false, "Error Getting Details");
+                }
+            }
             else {
                 $displayoutput = displayoutput(false, "Invalid Code or User Indentification");
             }
@@ -65,7 +73,7 @@ function displayoutput($status, $txt)
             <h4>Error!</h4>
             ".$txt."
         </div>
-        <p>You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
+        <p> <a href='' style='font-weight:bold;'>Try Again</a> <br> You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
         ";
     }
     else if($status == true)
@@ -75,7 +83,7 @@ function displayoutput($status, $txt)
             <h4>Success!</h4>
             ".$txt."
         </div>
-        <p>You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
+        <p>You may <a href='login.php' style='font-weight:bold;'>Login</a> or Go back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
         ";
     }
     else
@@ -85,7 +93,7 @@ function displayoutput($status, $txt)
             <h4>Success!</h4>
             ".$txt."
         </div>
-        <p>You may <a href='signup.php' style='font-weight:bold;'>Signup</a> or back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
+        <p>You may <a href='login.php' style='font-weight:bold;'>Login</a> or Go back to <a href='./' style='font-weight:bold;'>Homepage</a>.</p>
         ";   
     }
 
