@@ -437,7 +437,7 @@
 
                                     ?>
                                     <form class="form " action="assets/insert.php?type=comment&id=<?= $components->protect($article_id) ?>#commentsec" method="POST" id="main_contact_form">
-                                        <p>Your email adress will not be published ,Requied fileds are marked*.</p>
+                                        <p>Your email adress will not be published.</p>
                                         <div class="alert alert-success contact_msg" style="display: none" role="alert">
                                             Your message was sent successfully.
                                         </div>
