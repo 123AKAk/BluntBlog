@@ -430,6 +430,12 @@
                                 <div class="comments-form">
                                     <h4 >Leave a Comment</h4>
                                     <!--form-->
+                                    <?php
+                                     $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+                                     $stmt->execute([$components->unprotect($_SESSION["blunt_blog_user_status_"])]);
+                                     $useraccount = $stmt->fetch();
+
+                                    ?>
                                     <form class="form " action="assets/insert.php?type=comment&id=<?= $components->protect($article_id) ?>#commentsec" method="POST" id="main_contact_form">
                                         <p>Your email adress will not be published ,Requied fileds are marked*.</p>
                                         <div class="alert alert-success contact_msg" style="display: none" role="alert">
@@ -438,13 +444,13 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <input type="text" name="username" id="name" class="form-control" placeholder="Name*" required="required">
+                                                    <input type="text" name="username" id="name" class="form-control" placeholder="Name*" required="required" value="<?= isset($useraccount["username"]) ? $useraccount["username"] : "" ?>" <?= isset($useraccount["username"]) ? "readonly" : "" ?>>
                                                     <input type="hidden" name="id_article" value="<?= $components->protect($article_id) ?>">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <textarea name="comment" id="comment" cols="30" rows="5" class="form-control" placeholder="Add your comment...*" required="required"></textarea>
+                                                    <textarea name="comment" id="comment" cols="30" rows="5" class="form-control" placeholder="Add your comment..." required="required"></textarea>
                                                 </div>
                                             </div>
                                         
