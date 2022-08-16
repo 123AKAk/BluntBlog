@@ -30,7 +30,7 @@ if (isset($_SESSION["blunt_blog_user_loggedin_"])){
     <link rel="icon" sizes="16x16" href="assets/img/favicon.png">
 
     <!-- Title -->
-    <title> BLUNT - Personal Blog </title>
+    <title> HRI GLOBAL - Blog </title>
   
     <!-- CSS Plugins -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -41,6 +41,10 @@ if (isset($_SESSION["blunt_blog_user_loggedin_"])){
     <!-- main style -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!-- alertify -->
+    <link href="admin/assets/js/alertify/themes/alertify.core.css" rel="stylesheet">
+    <link href="admin/assets/js/alertify/themes/alertify.default.css" rel="stylesheet">
 
     <?php include 'includes/metatags.php'; ?>
 

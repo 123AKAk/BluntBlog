@@ -45,6 +45,85 @@
         event.preventDefault();
     }); 
 
+    $( "#editprofileform" ).submit(function( event ) 
+    {
+        var uid = $( "#uid" ).val();
+        var username = $( "#accountusername" ).val();
+        var email = $( "#accountemail" ).val();
+        
+        let formdata = new FormData();
+        formdata.append("namespace", "info");
+        formdata.append("username", username);
+        formdata.append("email", email);
+        formdata.append("userid", uid);
+
+        let loca = "assets/updateuserprofile.php";
+        fetch(loca, { method: "POST", body: formdata })
+        .then(res => res.text())
+        .then(data => 
+        {
+            var result = JSON.parse(data);
+            if(result.response == true)
+            {
+                alertify.success(result.message);
+                // alertify.alert(result.message, function(){
+                //     alertify.message('OK');
+                // });
+                setTimeout(function(){
+                    window.location.reload(1);
+                 }, 2500);
+            }
+            else
+            {
+                alertify.error(result.message);
+            }
+        });
+            
+        event.preventDefault();
+    });
+
+    $( "#passwordeditprofileform" ).submit(function( event ) 
+    {
+        var uid = $( "#uid" ).val();
+        var newpassword = $( "#accountnewpassword" ).val();
+        var confrimpassword = $( "#accountconfrimpassword" ).val();
+        var oldpassword = $( "#accountoldpassword" ).val();
+
+        if(newpassword === confrimpassword)
+        {
+            let formdata = new FormData();
+            formdata.append("namespace", "passinfo");
+            formdata.append("password", newpassword);
+            formdata.append("oldpassword", oldpassword);
+            formdata.append("userid", uid);
+
+            let loca = "assets/updateuserprofile.php";
+            fetch(loca, { method: "POST", body: formdata })
+            .then(res => res.text())
+            .then(data => 
+            {
+                var result = JSON.parse(data);
+                if(result.response == true)
+                {
+                    alertify.success(result.message);
+                    // alertify.alert(result.message, function(){
+                    //     alertify.message('OK');
+                    // });
+                }
+                else
+                {
+                    alertify.error(result.message);
+                }
+            });
+        }
+        else
+        {
+            alertify.error("New Passwords are not the same");
+        }
+            
+        event.preventDefault();
+    }); 
+
     function savepost(postid, userid)
     {
         var realpostid = $(postid).val();

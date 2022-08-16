@@ -62,7 +62,9 @@
                                         <a class="nav-link" href="useraccount.php"> Account </a>
                                     </li>
                                 <?php else : ?>
-                                    
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="signup.php"> Signup </a>
+                                    </li>
                                 <?php endif;  ?>
                             </ul>
                         </div>

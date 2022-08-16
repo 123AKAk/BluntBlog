@@ -13,6 +13,17 @@
         echo "<script>window.location.replace('./');</script>";
     }
 
+    echo $user_id = $components->unprotect($_SESSION["blunt_blog_user_status_"]);
+    $stmt = $conn->prepare("SELECT * FROM `users` WHERE `id` = ?");
+    $stmt->execute([$user_id]);
+    $account = $stmt->fetch();
+    
+    if(empty($account))
+    {
+        return;
+        echo "<script>window.location.replace('404.php?err= Sorry User Account does not exist');</script>";
+    }
+
     $uid = $components->unprotect($realuserid);
     $stmt = $conn->prepare("SELECT * FROM userfollow WHERE user_id = $uid");
     $stmt->execute();
@@ -21,6 +32,8 @@
     $stmt = $conn->prepare("SELECT * FROM saved WHERE user_id = $uid");
     $stmt->execute();
     $getpostid = $stmt->fetchAll();
+
+    
 
 ?> 
 <style>
@@ -61,8 +74,8 @@
                  <div class="row">
                      <div class="col-lg-12">
                          <div class="section-heading-2-title">
-                             <h1>Account</h1>
-                             <p class="links"><a href="./">Home <i class="las la-angle-right"></i></a> Account</p>
+                             <h1><?= $account["username"] ?>'s Account</h1>
+                             <p class="links"><a href="./">Home <i class="las la-angle-right"></i></a>User Account</p>
                          </div>
                      </div>  
                  </div>
@@ -106,22 +119,28 @@
                                         <div class="">
                                             <p class="ml-3">Edit Your Info <i title="Edit Info" class="fas fa-edit" ></i></p>
                                             <div class="col">
+                                                <input value="<?= $_SESSION["blunt_blog_user_status_"] ?>" id="uid" type="hidden"/>
+                                                <form id="editprofileform">
                                                 <div class="row form-group mb-2">
-                                                    <input type="text" class="m-3 col-md-5 form-control <?= (!empty($username_err)) ? 'is-invalid' : ''; ?>" placeholder="Username" name="username" value="<?= (!empty($_SESSION["username"])) ? $_SESSION["username"] : ''; ?>"/>
+                                                    <input type="text" class="m-3 col-md-5 form-control" placeholder="Username*" id="accountusername" name="username" value="<?= $account["username"] ?>" required/>
 
-                                                    <input type="email" class="m-3 col-md-5 form-control <?= (!empty($email_err)) ? 'is-invalid' : ''; ?>" placeholder="Email" name="email" value="<?= (!empty($_SESSION["email"])) ? $_SESSION["email"] : ''; ?>"/>
+                                                    <input type="email" class="m-3 col-md-5 form-control" placeholder="Email*" id="accountemail" name="email" value="<?= $account["email"] ?>" required/>
 
-                                                    <button type="submit" class=" m-3 col-md-1 btn btn-sm btn-secondary">Save</button>
+                                                    <button type="submit" class="btn-subscribe m-3 col-md-1 btn-sm btn-primary" style="width:75px; max-width:75px;">Save</button>
                                                 </div>
+                                                </form>
+                                                <hr>
+                                                <form id="passwordeditprofileform">
                                                 <div class="row form-group">
-                                                    <input type="password" class="m-3 col-md-5 form-control <?= (!empty($password_err)) ? 'is-invalid' : ''; ?>" placeholder="Old Password*" name="password" value="<?= (!empty($_SESSION["password"])) ? $_SESSION["password"] : ''; ?>"/>
+                                                    <input type="password" class="m-3 col-md-5 form-control" placeholder="Current Password*" id="accountoldpassword" name="password" value="" required/>
 
-                                                    <input type="password" class="m-3 col-md-5 form-control <?= (!empty($password_err)) ? 'is-invalid' : ''; ?>" placeholder="New Password*" name="password" value="<?= (!empty($_SESSION["password"])) ? $_SESSION["password"] : ''; ?>"/>
+                                                    <input type="password" class="m-3 col-md-5 form-control" placeholder="New Password*" id="accountnewpassword" name="password" value="" required/>
 
-                                                    <input type="password" class="m-3 col-md-5 form-control <?= (!empty($confrimpassword_err)) ? 'is-invalid' : ''; ?>" placeholder="Confrim new Password*" name="confrimpassword" value=""/>
+                                                    <input type="password" class="m-3 col-md-5 form-control" placeholder="Confrim new Password*" id="accountconfrimpassword" name="confrimpassword" value="" required/>
                                                     
-                                                    <button type="submit" class="m-3 btn btn-sm btn-secondary">Change Password</button>
+                                                    <button type="submit" class="btn-subscribe m-3 btn-sm btn-primary">Change Password</button>
                                                 </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

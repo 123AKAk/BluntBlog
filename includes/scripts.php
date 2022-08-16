@@ -29,6 +29,9 @@
     <script src="assets/vendor/jquery/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="assets/vendor/jquery/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
 
+    <!-- alertify -->
+    <script src="admin/assets/js/alertify/src/alertify.js"></script>
+
     <script src="assets/js/mainscripts.js"></script>
 
 </body>
