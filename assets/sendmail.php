@@ -260,6 +260,56 @@ class send_Mail
         {
         }
     }
+
+    function adminBulkMail($email, $message, $subject)
+	{
+        include "varnames.php";
+
+        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+        $url = "https://";
+        else
+        $url = "http://";
+
+        $url.= $_SERVER['HTTP_HOST'];
+
+        require 'vendor/autoload.php';
+        $mail = new PHPMailer(true);
+        try
+        {
+            $mail->Host = $siteemailhost;
+            $mail->SMTPAuth = true;
+            $mail->Username = $siteemail;
+            $mail->Password = $siteemailpassword;
+            $mail->SMTPSecure = 'SSL';
+            $mail->Port = $siteemailport;
+
+            $mail->setFrom($siteemail, $globalname);
+            $mail->addAddress($email, $username);
+            $mail->addReplyTo($siteemail, 'For any other Information');
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = $message;
+            $mail->AltBody = $message;
+
+            $mail->send();
+
+            if (!$mail->send())
+            {
+                return $result = ['response' => false, 'message' => 'EMAIL SENDING FAILED. INFO'];
+            }
+            else 
+            {
+                return $result = ['response' => true, 'message' => 'Message Sent!'];
+            }
+        }
+        catch (Exception $eax) 
+        {
+            return $result = ['response' => false, 'message' => 'EMAIL SENDING FAILED. INFO: '.$mail->ErrorInfo." ".$eax];
+        }
+        finally
+        {
+        }
+    }
 }
 
 ?>

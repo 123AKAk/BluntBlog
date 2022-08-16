@@ -58,18 +58,18 @@
                                 </div>
                                 <ul>
                                     <li>
-                                        <a href="profile.php">
+                                        <a href="profile.php?type=banauthor&id=<?= $adid?>">
                                             <i class="far fa-edit"></i> Edit Profile
                                         </a>
                                     </li>
                                     <?php if($type == 2)
                                     {
                                     ?>
-                                    <li>
+                                    <!-- <li>
                                         <a href="setting.php">
                                             <i class="fas fa-cog"></i> Settings
                                         </a>
-                                    </li>
+                                    </li> -->
                                     <?php
                                     }
                                     ?>

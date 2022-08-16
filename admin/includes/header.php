@@ -60,6 +60,9 @@
     <link rel="stylesheet" type="text/css" href="assets/css/theme.css">
 
     <link rel="stylesheet" type="text/css" href="assets/css/auth.css">
+    <!-- alertify -->
+    <link href="assets/js/alertify/themes/alertify.core.css" rel="stylesheet">
+    <link href="assets/js/alertify/themes/alertify.default.css" rel="stylesheet">
 
     <style>
         /* *&* */

@@ -18,6 +18,8 @@
     $signupmsg = "";
     if(isset($_GET["admsg"]))
         $signupmsg = "Sign Up Successful - Verify your Email and Login in with your account details";
+    if(isset($_GET["newadmsg"]))
+        $signupmsg = "Account Password Reset Successful - Login in with new account details";
 
     // Define variables and initialize with empty values
     $email = $password = "";
@@ -177,7 +179,7 @@
                                 <input type="checkbox" class="custom-control-input" id="rememberMe">
                                     <label class="custom-control-label" for="rememberMe">Remember Me</label>
                                 </div>
-                                <a href="forgotpassword.php" class="btn-link ">Forgot Password?</a>
+                                <a href="adminforgotpassword.php" class="btn-link ">Forgot Password?</a>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn-custom">Login</button>

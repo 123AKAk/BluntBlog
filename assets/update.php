@@ -143,6 +143,44 @@ if ($conn)
                 }
                 break;
 
+            case "editprofile":
+                // Update DataBase
+                $fullName = test_input($_POST["authName"]);
+                $description = test_input($_POST["authDesc"]);
+                $email = test_input($_POST["authEmail"]);
+                $twitter = test_input($_POST["authTwitter"]);
+                $github = test_input($_POST["authGithub"]);
+                $linkedin = test_input($_POST["authLinkedin"]);
+                $imageName = test_input($_FILES["authImage"]["name"]);
+
+                // Upload Image
+                if ($_FILES["authImage"]['error'] === 0) {
+                    uploadImage2("authImage", "../img/avatar/");
+                } else {
+                    $imageName = $urlImage;
+                }
+
+                try {
+                    $sql = "UPDATE `author`
+                        SET `author_fullname`= ?, `author_desc`= ?,`author_email`=?, `author_twitter`=?, `auth_instagram`= ?, `auth_facebook`= ?, `author_avatar`= ?
+                        WHERE `author_id` = ?";
+
+                    $stmt = $conn->prepare($sql);
+
+                    $stmt->execute([$fullName, $description, $email, $twitter, $github, $linkedin, $imageName, $urlId]);
+
+                    //echo "author UPDATED successfully";
+                    $_SESSION["adminsuc"] = "Profile UPDATED successfully";
+                    header("Location: ../admin/profile.php", true, 301);
+                    exit;
+                } catch (PDOException $e) {
+                    //echo $e->getMessage();
+                    $_SESSION["adminerra"] = $e->getMessage();
+                    header("Location: ../admin/profile.php?id=$urlId");
+                    exit;
+                }
+                break;
+
             default:
                 break;
         }

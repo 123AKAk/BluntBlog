@@ -172,10 +172,9 @@
 <script src="assets/js/custom.js"></script>
 
 <script>
-      var fade = document.getElementById("alert");
-
       //hides the feedback alert
-      function hidealert(){
+    function hidealert(idname){
+        var fade = document.getElementById(idname);
         var div = fade;
         setTimeout(function(){ div.style.display = "none"; }, 600);
         div.style.opacity = "0";

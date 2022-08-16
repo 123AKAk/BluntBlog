@@ -4,9 +4,6 @@
     require 'assets/sharedComponents.php';
     $components = new SharedComponents();
     
-    include 'includes/header.php';
-    include 'includes/navbar.php';
-
     $email = $email_err = $email_succ = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
@@ -18,42 +15,48 @@
             $email = trim($_POST["email"]);
         }
 
-        if (empty($email_err)) {
-            $sql = "SELECT * FROM author WHERE email = :email";
-            if ($stmt = $pdo->prepare($sql)) {
+        if (empty($email_err)) 
+        {
+            $sql = "SELECT * FROM author WHERE author_email = :author_email";
+            if ($stmt = $pdo->prepare($sql)) 
+            {
                 $param_email = trim($_POST["email"]);
-                $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
-                if ($stmt->execute()) {
-                    if ($stmt->rowCount() == 1) {
-                        if ($row = $stmt->fetch()) {
-
+                $stmt->bindParam(":author_email", $param_email, PDO::PARAM_STR);
+                if ($stmt->execute())
+                {
+                    if ($stmt->rowCount() == 1) 
+                    {
+                        if ($row = $stmt->fetch()) 
+                        {
                             $set = 'EYO1BLUNT2AKAK3';
                             $code = substr(str_shuffle($set), 0, 12);
 
-                            $bsql = "UPDATE users SET code=:code WHERE id=:id";
+                            $bsql = "UPDATE author SET code=:code WHERE author_id=:author_id";
                             $stmt= $pdo->prepare($bsql);
-                            $stmt->execute(['code' => $code, 'id' => $row["id"],]);
+                            $stmt->execute(['code' => $code, 'author_id' => $row["author_id"],]);
                             if ($stmt->rowCount()) 
                             {
-                                $userid = $components->protect($row["id"]);
+                                $userid = $components->protect($row["author_id"]);
 
                                 require 'assets/sendmail.php';
                                 $model = new send_Mail();
-                                $mailresult = $model->forgotpasswrd($_POST["email"], $row["username"], $code, $userid, "admin");
+                                $mailresult = $model->forgotpasswrd($_POST["email"], $row["author_fullname"], $code, $userid, "admin");
                                 json_encode($mailresult);
                                 if($mailresult["response"] == true)
                                     $email_succ = $mailresult["message"];
                                 else
                                     $email_err = $mailresult["message"];
                             }
-                            
-                            
                         }
-                    } else {
+                    } 
+                    else 
+                    {
                         // Display an error message if username doesn't exist
                         $email_err = "No account found with that Email.";
                     }
-                } else {
+                }
+                else
+                {
                     echo "Oops! Something went wrong. Please try again later.";
                 }
                 unset($stmt);
@@ -61,6 +64,8 @@
         }
         unset($pdo);
     }
+    
+    include 'includes/header.php';
 ?>
 
     <!--section-heading-->
@@ -70,7 +75,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-heading-2-title ">
-                            <h1>Forgot Password</h1>
+                            <h1>Admin - Forgot Password</h1>
                             <p class="links"><a href="./">Home <i class="las la-angle-right"></i></a> Activate Account</p>
                         </div>
                     </div>  

@@ -86,7 +86,7 @@ include 'includes/navbar.php';
                                 }
                                 else
                                 {
-                                    $_SESSION["main_err"] = "User Codes Doesn't Match";
+                                    $_SESSION["main_err"] = "User codes Doesn't Match, click the last sent link from us in your email.";
                                 }
                             }
                         }

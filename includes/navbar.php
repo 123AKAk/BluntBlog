@@ -59,9 +59,6 @@
 
                                 <?php if ($loggedin) : ?>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="usersaved.php"> Saved </a>
-                                    </li>
-                                    <li class="nav-item">
                                         <a class="nav-link" href="useraccount.php"> Account </a>
                                     </li>
                                 <?php else : ?>

@@ -87,7 +87,7 @@
                                     else
                                     {
                                         // Redirect user to welcome page
-                                        header("location: index.php");
+                                        header("location: useraccount.php");
                                         exit;
                                     }
                                 }
